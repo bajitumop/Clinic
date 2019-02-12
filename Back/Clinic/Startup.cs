@@ -40,6 +40,8 @@
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseMvc(routeBuilder => routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}"));
