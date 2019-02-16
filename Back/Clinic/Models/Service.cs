@@ -4,6 +4,9 @@
 
     public class Service
     {
+        [Key]
+        public long Id { get; set; }
+
         [Required]
         public Specialty Specialty { get; set; }
 

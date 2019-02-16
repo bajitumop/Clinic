@@ -82,7 +82,7 @@
                         continue;
                     }
 
-                    doctor.Specialties.Add(specialty);
+                    doctor.DoctorSpecialties.Add(new DoctorSpecialty { Doctor = doctor, Specialty = specialty });
                     doctor.Schedule[specialty] = schedule.ScheduleByDayOfWeek;
                 }
 
@@ -91,7 +91,7 @@
                 Console.WriteLine("Statistics:");
                 Console.WriteLine($"Specialties imported: {specialties.Length}");
                 Console.WriteLine($"Total doctors: {doctors.Length}");
-                Console.WriteLine($"Doctors with schedule and specialties: {doctors.Count(x => x.Schedule.Count > 0 && x.Specialties.Count > 0)}");
+                Console.WriteLine($"Doctors with schedule and specialties: {doctors.Count(x => x.Schedule.Count > 0 && x.DoctorSpecialties.Count > 0)}");
                 Console.WriteLine($"Doctor images loaded: {doctors.Count(x => x.ImageUrl != null)}");
                 Console.WriteLine($"Services loaded: {services.Length}");
                 Console.WriteLine("Services by specialty:");
@@ -235,7 +235,7 @@
                         ThirdName = fullName[1],
                         ImageUrl = imageUrl,
                         Info = info,
-                        Specialties = new List<Specialty>(),
+                        DoctorSpecialties = new List<DoctorSpecialty>(),
                         Schedule = new Dictionary<Specialty, Dictionary<DayOfWeek, TimeSpan[]>>(),
                     };
                 })

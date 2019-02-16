@@ -15,5 +15,12 @@
         public DbSet<Service> Services { get; set; }
 
         public DbSet<Specialty> Specialties { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // todo: apply di
+            modelBuilder.ApplyConfiguration(new DoctorsConfiguration());
+            modelBuilder.ApplyConfiguration(new DoctorSpecialtiesConfiguration());
+        }
     }
 }

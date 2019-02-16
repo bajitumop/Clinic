@@ -3,15 +3,17 @@ using System;
 using Clinic.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Clinic.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190216201938_AddServicesRenameSpecialtiesAddDoctorFields")]
+    partial class AddServicesRenameSpecialtiesAddDoctorFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,19 +48,6 @@ namespace Clinic.Migrations
                     b.ToTable("Doctors");
                 });
 
-            modelBuilder.Entity("Clinic.Models.DoctorSpecialty", b =>
-                {
-                    b.Property<long>("DoctorId");
-
-                    b.Property<long>("SpecialtyId");
-
-                    b.HasKey("DoctorId", "SpecialtyId");
-
-                    b.HasIndex("SpecialtyId");
-
-                    b.ToTable("DoctorSpecialty");
-                });
-
             modelBuilder.Entity("Clinic.Models.Service", b =>
                 {
                     b.Property<long>("Id")
@@ -85,10 +74,14 @@ namespace Clinic.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<long?>("DoctorId");
+
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
 
                     b.ToTable("Specialties");
                 });
@@ -107,25 +100,19 @@ namespace Clinic.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Clinic.Models.DoctorSpecialty", b =>
+            modelBuilder.Entity("Clinic.Models.Service", b =>
                 {
-                    b.HasOne("Clinic.Models.Doctor", "Doctor")
-                        .WithMany("DoctorSpecialties")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Clinic.Models.Specialty", "Specialty")
-                        .WithMany("DoctorSpecialties")
+                        .WithMany()
                         .HasForeignKey("SpecialtyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Clinic.Models.Service", b =>
+            modelBuilder.Entity("Clinic.Models.Specialty", b =>
                 {
-                    b.HasOne("Clinic.Models.Specialty", "Specialty")
-                        .WithMany("Services")
-                        .HasForeignKey("SpecialtyId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("Clinic.Models.Doctor")
+                        .WithMany("Specialties")
+                        .HasForeignKey("DoctorId");
                 });
 #pragma warning restore 612, 618
         }
