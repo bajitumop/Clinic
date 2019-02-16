@@ -5,4 +5,12 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="0.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Clinic\Clinic.csproj" />
+  </ItemGroup>
+
 </Project>
