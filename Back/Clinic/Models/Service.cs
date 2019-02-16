@@ -5,7 +5,7 @@
     public class Service
     {
         [Required]
-        public Speciality Speciality { get; set; }
+        public Specialty Specialty { get; set; }
 
         [Required]
         public string Description { get; set; }

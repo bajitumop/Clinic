@@ -59,12 +59,12 @@
             {
                 var doctors = ParseDoctors(webClient, htmlParser);
                 var services = ParseServices(webClient, htmlParser);
-                var specialities = services.Select(x => x.Speciality).Distinct().ToArray();
+                var specialties = services.Select(x => x.Specialty).Distinct().ToArray();
                 var schedules = ParseSchedule(webClient, htmlParser);
 
                 foreach (var schedule in schedules)
                 {
-                    var speciality = specialities.FirstOrDefault(x => x.Name == schedule.SpecialityName);
+                    var specialty = specialties.FirstOrDefault(x => x.Name == schedule.SpecialtyName);
 
                     var doctor = doctors.FirstOrDefault(
                         d => new[] { d.FirstName, d.SecondName, d.ThirdName }.Intersect(schedule.DoctorName).Count()
@@ -76,26 +76,26 @@
                         continue;
                     }
 
-                    if (speciality == null)
+                    if (specialty == null)
                     {
-                        Console.WriteLine("Speciality not found by schedule!");
+                        Console.WriteLine("Specialty not found by schedule!");
                         continue;
                     }
 
-                    doctor.Specialities.Add(speciality);
-                    doctor.Schedule[speciality] = schedule.ScheduleByDayOfWeek;
+                    doctor.Specialties.Add(specialty);
+                    doctor.Schedule[specialty] = schedule.ScheduleByDayOfWeek;
                 }
 
                 DownloadDoctorImages(webClient, doctors, ImagesFolder);
 
                 Console.WriteLine("Statistics:");
-                Console.WriteLine($"Specialities imported: {specialities.Length}");
+                Console.WriteLine($"Specialties imported: {specialties.Length}");
                 Console.WriteLine($"Total doctors: {doctors.Length}");
-                Console.WriteLine($"Doctors with schedule and specialities: {doctors.Count(x => x.Schedule.Count > 0 && x.Specialities.Count > 0)}");
+                Console.WriteLine($"Doctors with schedule and specialties: {doctors.Count(x => x.Schedule.Count > 0 && x.Specialties.Count > 0)}");
                 Console.WriteLine($"Doctor images loaded: {doctors.Count(x => x.ImageUrl != null)}");
                 Console.WriteLine($"Services loaded: {services.Length}");
-                Console.WriteLine("Services by speciality:");
-                foreach (var serviceGroup in services.GroupBy(x => x.Speciality))
+                Console.WriteLine("Services by specialty:");
+                foreach (var serviceGroup in services.GroupBy(x => x.Specialty))
                 {
                     Console.WriteLine($"\t{serviceGroup.Key.Name}: {serviceGroup.Count()}");
                 }
@@ -116,7 +116,7 @@
                 .Where(row => row.TextContent.Trim().Any())
                 .Select(row =>
                     {
-                        var specialityName = row.Children[0].TextContent.Trim();
+                        var specialtyName = row.Children[0].TextContent.Trim();
                         var doctorName = row.Children[1].TextContent.Split((string[])null, StringSplitOptions.RemoveEmptyEntries);
 
                         var schedule = row.Children[3].TextContent.Split('\n').Skip(1).Take(3)
@@ -145,7 +145,7 @@
 
                         return new Schedule
                         {
-                            SpecialityName = specialityName,
+                            SpecialtyName = specialtyName,
                             DoctorName = doctorName,
                             ScheduleByDayOfWeek = new Dictionary<DayOfWeek, TimeSpan[]>
                                 {
@@ -173,13 +173,13 @@
                 .QuerySelectorAll("td")
                 .Last(x => x.TextContent.TrimStart().StartsWith("Цены на услуги"));
 
-            Speciality lastSpeciality = null;
+            Specialty lastSpecialty = null;
             var services = new List<Service>();
             foreach (var row in priceListTable.QuerySelectorAll("tr"))
             {
                 if (row.Attributes?["bgcolor"] != null)
                 {
-                    lastSpeciality = new Speciality { Name = row.TextContent.Trim() };
+                    lastSpecialty = new Specialty { Name = row.TextContent.Trim() };
                     continue;
                 }
 
@@ -187,7 +187,7 @@
 
                 services.Add(new Service
                                {
-                                   Speciality = lastSpeciality,
+                                   Specialty = lastSpecialty,
                                    Description = values[0],
                                    Price = float.Parse(values[1].Replace(" ", string.Empty), NumberStyles.Any, CultureInfo.InvariantCulture),
                                    AdditionalInfo = values[2]
@@ -235,8 +235,8 @@
                         ThirdName = fullName[1],
                         ImageUrl = imageUrl,
                         Info = info,
-                        Specialities = new List<Speciality>(),
-                        Schedule = new Dictionary<Speciality, Dictionary<DayOfWeek, TimeSpan[]>>(),
+                        Specialties = new List<Specialty>(),
+                        Schedule = new Dictionary<Specialty, Dictionary<DayOfWeek, TimeSpan[]>>(),
                     };
                 })
                 .ToArray();
@@ -275,7 +275,7 @@
 
         private class Schedule
         {
-            public string SpecialityName { get; set; }
+            public string SpecialtyName { get; set; }
 
             public string[] DoctorName { get; set; }
 

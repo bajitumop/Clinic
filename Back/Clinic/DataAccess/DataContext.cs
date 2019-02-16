@@ -12,6 +12,6 @@
 
         public DbSet<Doctor> Doctors { get; set; }
 
-        public DbSet<Speciality> Specialities { get; set; }
+        public DbSet<Specialty> Specialties { get; set; }
     }
 }

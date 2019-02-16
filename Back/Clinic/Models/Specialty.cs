@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class Speciality
+    public class Specialty
     {
         [Key]
         public long Id { get; set; }

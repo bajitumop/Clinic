@@ -8,23 +8,20 @@
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Logging;
 
     [Route("Home")]
     [ApiController]
     public class HomeController : ControllerBase
     {
         private readonly DataContext dataContext;
-        private readonly ILogger logger;
 
-        public HomeController(DataContext dataContext, ILogger<HomeController> logger)
+        public HomeController(DataContext dataContext)
         {
             this.dataContext = dataContext;
-            this.logger = logger;
         }
         
         [HttpGet, Route("Users")]
-        public async Task<IEnumerable<User>> Users(int x = 5, int z = 7)
+        public async Task<IEnumerable<User>> Users()
         {
             return await this.dataContext.Users.ToListAsync();
         }

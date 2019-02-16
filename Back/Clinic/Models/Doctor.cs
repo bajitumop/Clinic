@@ -24,8 +24,8 @@
 
         public string[] Positions { get; set; }
 
-        public List<Speciality> Specialities { get; set; }
+        public List<Specialty> Specialties { get; set; }
 
-        public Dictionary<Speciality, Dictionary<DayOfWeek, TimeSpan[]>> Schedule { get; set; }
+        public Dictionary<Specialty, Dictionary<DayOfWeek, TimeSpan[]>> Schedule { get; set; }
     }
 }
