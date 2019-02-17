@@ -11,12 +11,16 @@
     using AngleSharp.Html.Dom;
     using AngleSharp.Html.Parser;
 
+    using Clinic.DataAccess;
     using Clinic.Domain;
+
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
 
     public class Program
     {
-        public const string ImagesFolder = "../../../../Clinic/wwwroot/images";
-
+        private static IConfigurationRoot appConfiguration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        
         public static void Main(string[] args)
         {
             var actions = new Dictionary<string, Action>
@@ -62,6 +66,8 @@
                 var specialties = services.Select(x => x.Specialty).Distinct().ToArray();
                 var schedules = ParseSchedule(webClient, htmlParser);
 
+                var doctors1 = doctors.Where(x => x.Positions.Length > 1).ToArray();
+
                 foreach (var schedule in schedules)
                 {
                     var specialty = specialties.FirstOrDefault(x => x.Name == schedule.SpecialtyName);
@@ -86,7 +92,7 @@
                     doctor.Schedule[specialty] = schedule.ScheduleByDayOfWeek;
                 }
 
-                DownloadDoctorImages(webClient, doctors, ImagesFolder);
+                DownloadDoctorImages(webClient, doctors, appConfiguration["ImageFolder"]);
 
                 Console.WriteLine("Statistics:");
                 Console.WriteLine($"Specialties imported: {specialties.Length}");
@@ -99,10 +105,21 @@
                 {
                     Console.WriteLine($"\t{serviceGroup.Key.Name}: {serviceGroup.Count()}");
                 }
+
+                var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
+                optionsBuilder.UseNpgsql(appConfiguration["DbConnection"]);
+
+                using (var db = new DataContext(optionsBuilder.Options))
+                {
+                    db.Doctors.AddRange(doctors.Where(x => x.Schedule.Any() && x.DoctorSpecialties.Any()));
+                    db.Specialties.AddRange(specialties);
+                    db.Services.AddRange(services);
+                    db.SaveChanges();
+                }
             }
         }
         
-        private static Schedule[] ParseSchedule(WebClient webClient, HtmlParser htmlParser)
+        private static ScheduleParsingModel[] ParseSchedule(WebClient webClient, HtmlParser htmlParser)
         {
             Console.WriteLine("Downloading schedule page...");
             var schedulePage = webClient.DownloadString("http://www.ks-klinika.ru/raspisanie");
@@ -143,7 +160,7 @@
                                 })
                             .ToArray();
 
-                        return new Schedule
+                        return new ScheduleParsingModel
                         {
                             SpecialtyName = specialtyName,
                             DoctorName = doctorName,
@@ -273,7 +290,7 @@
             }
         }
 
-        private class Schedule
+        private class ScheduleParsingModel
         {
             public string SpecialtyName { get; set; }
 
