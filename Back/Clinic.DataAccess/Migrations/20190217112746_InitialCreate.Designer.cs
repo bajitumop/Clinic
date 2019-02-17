@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Clinic.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190217092553_InitialCreate")]
+    [Migration("20190217112746_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,8 +35,6 @@ namespace Clinic.DataAccess.Migrations
 
                     b.Property<string[]>("Positions");
 
-                    b.Property<string>("Schedule");
-
                     b.Property<string>("SecondName")
                         .IsRequired();
 
@@ -48,17 +46,41 @@ namespace Clinic.DataAccess.Migrations
                     b.ToTable("Doctors");
                 });
 
-            modelBuilder.Entity("Clinic.Domain.DoctorSpecialty", b =>
+            modelBuilder.Entity("Clinic.Domain.Schedule", b =>
                 {
                     b.Property<long>("DoctorId");
 
                     b.Property<long>("SpecialtyId");
 
+                    b.Property<TimeSpan?>("FridayEnd");
+
+                    b.Property<TimeSpan?>("FridayStart");
+
+                    b.Property<TimeSpan?>("MondayEnd");
+
+                    b.Property<TimeSpan?>("MondayStart");
+
+                    b.Property<TimeSpan?>("SaturdayEnd");
+
+                    b.Property<TimeSpan?>("SaturdayStart");
+
+                    b.Property<TimeSpan?>("ThursdayEnd");
+
+                    b.Property<TimeSpan?>("ThursdayStart");
+
+                    b.Property<TimeSpan?>("TuesdayEnd");
+
+                    b.Property<TimeSpan?>("TuesdayStart");
+
+                    b.Property<TimeSpan?>("WednesdayEnd");
+
+                    b.Property<TimeSpan?>("WednesdayStart");
+
                     b.HasKey("DoctorId", "SpecialtyId");
 
                     b.HasIndex("SpecialtyId");
 
-                    b.ToTable("DoctorSpecialty");
+                    b.ToTable("Schedules");
                 });
 
             modelBuilder.Entity("Clinic.Domain.Service", b =>
@@ -95,15 +117,15 @@ namespace Clinic.DataAccess.Migrations
                     b.ToTable("Specialties");
                 });
 
-            modelBuilder.Entity("Clinic.Domain.DoctorSpecialty", b =>
+            modelBuilder.Entity("Clinic.Domain.Schedule", b =>
                 {
                     b.HasOne("Clinic.Domain.Doctor", "Doctor")
-                        .WithMany("DoctorSpecialties")
+                        .WithMany("Schedules")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Clinic.Domain.Specialty", "Specialty")
-                        .WithMany("DoctorSpecialties")
+                        .WithMany("Schedules")
                         .HasForeignKey("SpecialtyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

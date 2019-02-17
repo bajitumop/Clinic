@@ -11,7 +11,7 @@
         [Required]
         public string Name { get; set; }
 
-        public ICollection<DoctorSpecialty> DoctorSpecialties { get; set; }
+        public ICollection<Schedule> Schedules { get; set; }
         
         public ICollection<Service> Services { get; set; }
     }

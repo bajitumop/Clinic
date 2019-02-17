@@ -19,7 +19,7 @@
 
     public class Program
     {
-        private static IConfigurationRoot appConfiguration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        private static readonly IConfigurationRoot AppConfiguration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
         
         public static void Main(string[] args)
         {
@@ -64,17 +64,16 @@
                 var doctors = ParseDoctors(webClient, htmlParser);
                 var services = ParseServices(webClient, htmlParser);
                 var specialties = services.Select(x => x.Specialty).Distinct().ToArray();
-                var schedules = ParseSchedule(webClient, htmlParser);
+                var scheduleParsingModels = ParseScheduleParsingModels(webClient, htmlParser);
 
-                var doctors1 = doctors.Where(x => x.Positions.Length > 1).ToArray();
-
-                foreach (var schedule in schedules)
+                var schedules = new List<Schedule>();
+                foreach (var scheduleParsingModel in scheduleParsingModels)
                 {
-                    var specialty = specialties.FirstOrDefault(x => x.Name == schedule.SpecialtyName);
+                    var specialty = specialties.FirstOrDefault(x => x.Name == scheduleParsingModel.SpecialtyName);
 
                     var doctor = doctors.FirstOrDefault(
-                        d => new[] { d.FirstName, d.SecondName, d.ThirdName }.Intersect(schedule.DoctorName).Count()
-                             == schedule.DoctorName.Length);
+                        d => new[] { d.FirstName, d.SecondName, d.ThirdName }.Intersect(scheduleParsingModel.DoctorName).Count()
+                             == scheduleParsingModel.DoctorName.Length);
 
                     if (doctor == null)
                     {
@@ -88,38 +87,63 @@
                         continue;
                     }
 
-                    doctor.DoctorSpecialties.Add(new DoctorSpecialty { Doctor = doctor, Specialty = specialty });
-                    doctor.Schedule[specialty] = schedule.ScheduleByDayOfWeek;
+                    var schedule = new Schedule
+                        {
+                            Doctor = doctor,
+                            Specialty = specialty,
+                            MondayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Monday]?[0],
+                            MondayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Monday]?[1],
+                            TuesdayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Tuesday]?[0],
+                            TuesdayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Tuesday]?[1],
+                            WednesdayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Wednesday]?[0],
+                            WednesdayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Wednesday]?[1],
+                            ThursdayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Thursday]?[0],
+                            ThursdayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Thursday]?[1],
+                            FridayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Friday]?[0],
+                            FridayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Friday]?[1],
+                            SaturdayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Saturday]?[0],
+                            SaturdayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Saturday]?[1]
+                        };
+
+                    schedules.Add(schedule);
+                    specialty.Schedules.Add(schedule);
+                    doctor.Schedules.Add(schedule);
                 }
 
-                DownloadDoctorImages(webClient, doctors, appConfiguration["ImageFolder"]);
+                DownloadDoctorImages(webClient, doctors, AppConfiguration["ImageFolder"]);
+
+                Console.WriteLine("Inserting data to db...");
+                var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
+                optionsBuilder.UseNpgsql(AppConfiguration["DbConnection"]);
+
+                using (var db = new DataContext(optionsBuilder.Options))
+                {
+                    db.Doctors.AddRange(doctors.Where(x => x.Schedules.Any()));
+                    db.Specialties.AddRange(specialties);
+                    db.Services.AddRange(services);
+                    db.Schedules.AddRange(schedules);
+                    db.SaveChanges();
+                }
 
                 Console.WriteLine("Statistics:");
-                Console.WriteLine($"Specialties imported: {specialties.Length}");
                 Console.WriteLine($"Total doctors: {doctors.Length}");
-                Console.WriteLine($"Doctors with schedule and specialties: {doctors.Count(x => x.Schedule.Count > 0 && x.DoctorSpecialties.Count > 0)}");
+                Console.WriteLine($"Doctors with schedule and specialties: {doctors.Count(x => x.Schedules.Any())}");
                 Console.WriteLine($"Doctor images loaded: {doctors.Count(x => x.ImageUrl != null)}");
+
+                Console.WriteLine($"Specialties imported: {specialties.Length}");
+
+                Console.WriteLine($"Schedules imported: {schedules.Count}");
+                
                 Console.WriteLine($"Services loaded: {services.Length}");
                 Console.WriteLine("Services by specialty:");
                 foreach (var serviceGroup in services.GroupBy(x => x.Specialty))
                 {
                     Console.WriteLine($"\t{serviceGroup.Key.Name}: {serviceGroup.Count()}");
                 }
-
-                var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
-                optionsBuilder.UseNpgsql(appConfiguration["DbConnection"]);
-
-                using (var db = new DataContext(optionsBuilder.Options))
-                {
-                    db.Doctors.AddRange(doctors.Where(x => x.Schedule.Any() && x.DoctorSpecialties.Any()));
-                    db.Specialties.AddRange(specialties);
-                    db.Services.AddRange(services);
-                    db.SaveChanges();
-                }
             }
         }
         
-        private static ScheduleParsingModel[] ParseSchedule(WebClient webClient, HtmlParser htmlParser)
+        private static ScheduleParsingModel[] ParseScheduleParsingModels(WebClient webClient, HtmlParser htmlParser)
         {
             Console.WriteLine("Downloading schedule page...");
             var schedulePage = webClient.DownloadString("http://www.ks-klinika.ru/raspisanie");
@@ -196,7 +220,11 @@
             {
                 if (row.Attributes?["bgcolor"] != null)
                 {
-                    lastSpecialty = new Specialty { Name = row.TextContent.Trim() };
+                    lastSpecialty = new Specialty
+                                        {
+                                            Name = row.TextContent.Trim(),
+                                            Schedules = new List<Schedule>()
+                                        };
                     continue;
                 }
 
@@ -252,8 +280,7 @@
                         ThirdName = fullName[1],
                         ImageUrl = imageUrl,
                         Info = info,
-                        DoctorSpecialties = new List<DoctorSpecialty>(),
-                        Schedule = new Dictionary<Specialty, Dictionary<DayOfWeek, TimeSpan[]>>(),
+                        Schedules = new List<Schedule>(),
                     };
                 })
                 .ToArray();

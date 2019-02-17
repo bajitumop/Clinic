@@ -24,8 +24,6 @@
 
         public string[] Positions { get; set; }
 
-        public ICollection<DoctorSpecialty> DoctorSpecialties { get; set; }
-
-        public Dictionary<Specialty, Dictionary<DayOfWeek, TimeSpan[]>> Schedule { get; set; }
+        public ICollection<Schedule> Schedules { get; set; }
     }
 }

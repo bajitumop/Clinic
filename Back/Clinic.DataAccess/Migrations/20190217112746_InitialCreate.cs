@@ -19,8 +19,7 @@ namespace Clinic.DataAccess.Migrations
                     ThirdName = table.Column<string>(nullable: false),
                     ImageUrl = table.Column<string>(nullable: true),
                     Info = table.Column<string>(nullable: true),
-                    Positions = table.Column<string[]>(nullable: true),
-                    Schedule = table.Column<string>(nullable: true)
+                    Positions = table.Column<string[]>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -41,23 +40,35 @@ namespace Clinic.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DoctorSpecialty",
+                name: "Schedules",
                 columns: table => new
                 {
                     DoctorId = table.Column<long>(nullable: false),
-                    SpecialtyId = table.Column<long>(nullable: false)
+                    SpecialtyId = table.Column<long>(nullable: false),
+                    MondayStart = table.Column<TimeSpan>(nullable: true),
+                    MondayEnd = table.Column<TimeSpan>(nullable: true),
+                    TuesdayStart = table.Column<TimeSpan>(nullable: true),
+                    TuesdayEnd = table.Column<TimeSpan>(nullable: true),
+                    WednesdayStart = table.Column<TimeSpan>(nullable: true),
+                    WednesdayEnd = table.Column<TimeSpan>(nullable: true),
+                    FridayStart = table.Column<TimeSpan>(nullable: true),
+                    FridayEnd = table.Column<TimeSpan>(nullable: true),
+                    ThursdayStart = table.Column<TimeSpan>(nullable: true),
+                    ThursdayEnd = table.Column<TimeSpan>(nullable: true),
+                    SaturdayStart = table.Column<TimeSpan>(nullable: true),
+                    SaturdayEnd = table.Column<TimeSpan>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DoctorSpecialty", x => new { x.DoctorId, x.SpecialtyId });
+                    table.PrimaryKey("PK_Schedules", x => new { x.DoctorId, x.SpecialtyId });
                     table.ForeignKey(
-                        name: "FK_DoctorSpecialty_Doctors_DoctorId",
+                        name: "FK_Schedules_Doctors_DoctorId",
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DoctorSpecialty_Specialties_SpecialtyId",
+                        name: "FK_Schedules_Specialties_SpecialtyId",
                         column: x => x.SpecialtyId,
                         principalTable: "Specialties",
                         principalColumn: "Id",
@@ -87,8 +98,8 @@ namespace Clinic.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DoctorSpecialty_SpecialtyId",
-                table: "DoctorSpecialty",
+                name: "IX_Schedules_SpecialtyId",
+                table: "Schedules",
                 column: "SpecialtyId");
 
             migrationBuilder.CreateIndex(
@@ -100,7 +111,7 @@ namespace Clinic.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DoctorSpecialty");
+                name: "Schedules");
 
             migrationBuilder.DropTable(
                 name: "Services");
