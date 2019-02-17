@@ -1,4 +1,4 @@
-﻿namespace Clinic.Models
+﻿namespace Clinic.Domain
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

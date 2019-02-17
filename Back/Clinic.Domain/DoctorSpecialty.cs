@@ -1,4 +1,4 @@
-﻿namespace Clinic.Models
+﻿namespace Clinic.Domain
 {
     public class DoctorSpecialty
     {

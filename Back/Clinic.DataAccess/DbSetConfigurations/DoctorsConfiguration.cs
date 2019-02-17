@@ -1,9 +1,9 @@
-﻿namespace Clinic.DataAccess
+﻿namespace Clinic.DataAccess.DbSetConfigurations
 {
     using System;
     using System.Collections.Generic;
 
-    using Clinic.Models;
+    using Clinic.Domain;
 
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;

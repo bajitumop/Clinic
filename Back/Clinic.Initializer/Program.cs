@@ -1,4 +1,4 @@
-﻿namespace Initializer
+﻿namespace Clinic.Initializer
 {
     using System;
     using System.Collections.Generic;
@@ -11,8 +11,8 @@
     using AngleSharp.Html.Dom;
     using AngleSharp.Html.Parser;
 
-    using Clinic.Models;
-    
+    using Clinic.Domain;
+
     public class Program
     {
         public const string ImagesFolder = "../../../../Clinic/wwwroot/images";

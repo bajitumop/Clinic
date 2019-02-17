@@ -4,7 +4,7 @@
     using System.Threading.Tasks;
 
     using Clinic.DataAccess;
-    using Clinic.Models;
+    using Clinic.Domain;
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -20,10 +20,10 @@
             this.dataContext = dataContext;
         }
         
-        [HttpGet, Route("Users")]
-        public async Task<IEnumerable<User>> Users()
+        [HttpGet, Route("doctors")]
+        public async Task<IEnumerable<Doctor>> Users()
         {
-            return await this.dataContext.Users.ToListAsync();
+            return await this.dataContext.Doctors.ToListAsync();
         }
     }
 }

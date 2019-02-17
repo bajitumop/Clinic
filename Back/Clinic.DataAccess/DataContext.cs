@@ -1,15 +1,15 @@
 ﻿namespace Clinic.DataAccess
 {
+    using Clinic.DataAccess.DbSetConfigurations;
+    using Clinic.Domain;
+
     using Microsoft.EntityFrameworkCore;
-    using Models;
 
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         { }
-
-        public DbSet<User> Users { get; set; }
-
+        
         public DbSet<Doctor> Doctors { get; set; }
 
         public DbSet<Service> Services { get; set; }
@@ -18,7 +18,7 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // todo: apply di
+            // ToDo: Apply DI
             modelBuilder.ApplyConfiguration(new DoctorsConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorSpecialtiesConfiguration());
         }
