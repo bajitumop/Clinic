@@ -1,6 +1,8 @@
 ﻿namespace Clinic
 {
     using Clinic.DataAccess;
+    using Clinic.DataAccess.Implementations;
+    using Clinic.DataAccess.Repositories;
     using Clinic.Middlewares;
 
     using Microsoft.AspNetCore.Builder;
@@ -26,6 +28,7 @@
             var connectionString = this.appConfiguration.GetConnectionString("DbConnection");
             services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
             services.AddMvc();
+            services.AddTransient<IServicesRepository, ServicesRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -44,7 +47,7 @@
 
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
-            app.UseMvc(routeBuilder => routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}"));
+            app.UseMvc(routeBuilder => routeBuilder.MapRoute("default", "{controller}/{action}/{id?}"));
         }
     }
 }

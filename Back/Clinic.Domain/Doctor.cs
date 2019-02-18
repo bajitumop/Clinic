@@ -1,10 +1,9 @@
 ﻿namespace Clinic.Domain
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public class Doctor
+    public class Doctor : Entity
     {
         [Key]
         public long Id { get; set; }

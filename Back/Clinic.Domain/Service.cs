@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class Service
+    public class Service : Entity
     {
         [Key]
         public long Id { get; set; }

@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class Schedule
+    public class Schedule : Entity
     {
         [Required]
         public long DoctorId { get; set; }

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public class Specialty
+    public class Specialty : Entity
     {
         [Key]
         public long Id { get; set; }
