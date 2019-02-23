@@ -31,13 +31,13 @@
             using (var encryptor = this.rijndaelManaged.CreateEncryptor())
             {
                 var encryptedBytes = encryptor.TransformFinalBlock(textInBytes, 0, textInBytes.Length);
-                return Convert.ToBase64String(encryptedBytes);
+                return BytesToString(encryptedBytes);
             }
         }
 
         public T Decrypt<T>(string cipher)
         {
-            var encryptedBytes = Convert.FromBase64String(cipher);
+            var encryptedBytes = StringToBytes(cipher);
             using (var decryptor = this.rijndaelManaged.CreateDecryptor())
             {
                 var decryptedBytes = decryptor.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
@@ -48,6 +48,22 @@
         public void Dispose()
         {
             this.rijndaelManaged?.Dispose();
+        }
+
+        private static string BytesToString(byte[] byteArray)
+        {
+            return BitConverter.ToString(byteArray).Replace("-", string.Empty);
+        }
+
+        private static byte[] StringToBytes(string hex)
+        {
+            var bytes = new byte[hex.Length / 2];
+            for (var i = 0; i < hex.Length; i += 2)
+            {
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            }
+
+            return bytes;
         }
     }
 }
