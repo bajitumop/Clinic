@@ -40,6 +40,26 @@ namespace Clinic.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Login = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(nullable: true),
+                    SecondName = table.Column<string>(nullable: true),
+                    ThirdName = table.Column<string>(nullable: true),
+                    Phone = table.Column<long>(nullable: false),
+                    Insurance = table.Column<string>(nullable: true),
+                    Permissions = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Schedules",
                 columns: table => new
                 {
@@ -115,6 +135,9 @@ namespace Clinic.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Services");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Doctors");

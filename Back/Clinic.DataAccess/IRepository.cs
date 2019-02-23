@@ -11,13 +11,13 @@
 
         Task<List<T>> All();
 
-        Task DeleteAsync(T entity);
+        void Delete(T entity);
 
         Task DeleteAsync(long id);
 
-        Task UpdateAsync(T entity);
+        void Update(T entity);
 
-        Task CreateAsync(T entity);
+        void Create(T entity);
 
         Task SaveChangesAsync();
     }

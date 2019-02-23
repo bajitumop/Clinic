@@ -1,7 +1,6 @@
 ﻿namespace Clinic.DataAccess
 {
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -36,24 +35,21 @@
             var entity = await this.GetAsync(id);
             if (entity != null)
             {
-                await this.DeleteAsync(entity);
+                this.Delete(entity);
             }
         }
 
-        [SuppressMessage("Compiler", "CS1998")]
-        public async Task DeleteAsync(T entity)
+        public void Delete(T entity)
         {
             this.dataContext.Set<T>().Remove(entity);
         }
 
-        [SuppressMessage("Compiler", "CS1998")]
-        public async Task UpdateAsync(T entity)
+        public void Update(T entity)
         {
             this.dataContext.Set<T>().Update(entity);
         }
 
-        [SuppressMessage("Compiler", "CS1998")]
-        public async Task CreateAsync(T entity)
+        public void Create(T entity)
         {
             this.dataContext.Set<T>().Add(entity);
         }

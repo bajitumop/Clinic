@@ -3,15 +3,17 @@ using System;
 using Clinic.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Clinic.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190221211838_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,6 +124,10 @@ namespace Clinic.DataAccess.Migrations
 
                     b.Property<string>("FirstName");
 
+                    b.Property<string>("Insurance");
+
+                    b.Property<string>("Login");
+
                     b.Property<string>("PasswordHash");
 
                     b.Property<string>("Permissions");
@@ -131,8 +137,6 @@ namespace Clinic.DataAccess.Migrations
                     b.Property<string>("SecondName");
 
                     b.Property<string>("ThirdName");
-
-                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 

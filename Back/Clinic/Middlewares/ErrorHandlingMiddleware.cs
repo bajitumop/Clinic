@@ -4,7 +4,7 @@
     using System.Net;
     using System.Threading.Tasks;
 
-    using Clinic.Models;
+    using Clinic.Models.OperationResults;
     using Clinic.Support.ActionResults;
 
     using Microsoft.AspNetCore.Http;
@@ -22,7 +22,7 @@
             this.logger = logger;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
@@ -31,9 +31,9 @@
             catch (Exception exc)
             {
                 this.logger.LogError(exc, exc.Message);
-                var operationResult = new ErrorOperationResult(exc.ToString());
+                var operationResult = new OperationResult(false, exc.ToString());
                 var customJsonResult = new CustomJsonResult(operationResult, HttpStatusCode.InternalServerError);
-                customJsonResult.ExecuteResult(new ActionContext { HttpContext = context });
+                await customJsonResult.ExecuteResultAsync(new ActionContext { HttpContext = context });
             }
         }
     }

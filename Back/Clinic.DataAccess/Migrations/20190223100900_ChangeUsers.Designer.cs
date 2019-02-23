@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Clinic.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190217112746_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190223100900_ChangeUsers")]
+    partial class ChangeUsers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -115,6 +115,30 @@ namespace Clinic.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Specialties");
+                });
+
+            modelBuilder.Entity("Clinic.Domain.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("Permissions");
+
+                    b.Property<long>("Phone");
+
+                    b.Property<string>("SecondName");
+
+                    b.Property<string>("ThirdName");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Clinic.Domain.Schedule", b =>

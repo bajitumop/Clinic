@@ -4,12 +4,16 @@
     using Clinic.DataAccess.Implementations;
     using Clinic.DataAccess.Repositories;
     using Clinic.Middlewares;
+    using Clinic.Services;
+    using Clinic.Support.Filters;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+
+    using Newtonsoft.Json;
 
     public class Startup
     {
@@ -27,8 +31,11 @@
         {
             var connectionString = this.appConfiguration.GetConnectionString("DbConnection");
             services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
-            services.AddMvc();
+            services.AddMvc(options => options.Filters.Add(typeof(ModelValidationFilterAttribute)));
+
             services.AddTransient<IServicesRepository, ServicesRepository>();
+            services.AddTransient<IUsersRepository, UsersRepository>();
+            services.AddSingleton(new CryptoService(JsonConvert.DeserializeObject<byte[]>(this.appConfiguration["AccessTokenSymmetricKey"])));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -39,12 +46,7 @@
             {
                 serviceScope.ServiceProvider.GetRequiredService<DataContext>().Database.Migrate();
             }
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
+            
             app.UseStaticFiles();
 
             app.UseMiddleware<RequestResponseLoggingMiddleware>();

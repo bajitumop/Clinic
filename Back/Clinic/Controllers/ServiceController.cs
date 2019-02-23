@@ -23,18 +23,18 @@
             var service = await this.servicesRepository.GetAsync(id);
             if (service != null)
             {
-                return Success(service);
+                return this.Success(service);
             }
             else
             {
-                return Error("Услуга не найдена");
+                return this.Error("Услуга не найдена");
             }
         }
 
         [HttpGet, Route("")]
         public async Task<IActionResult> All()
         {
-            return Success(await servicesRepository.All());
+            return this.Success(await servicesRepository.All());
         }
     }
 }

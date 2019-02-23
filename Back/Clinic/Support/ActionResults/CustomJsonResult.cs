@@ -3,7 +3,7 @@
     using System.Net;
     using System.Threading.Tasks;
 
-    using Clinic.Models;
+    using Clinic.Models.OperationResults;
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -12,12 +12,6 @@
 
     public class CustomJsonResult : StatusCodeResult
     {
-        private static readonly JsonSerializerSettings Settings
-            = new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore
-                };
-
         private readonly OperationResult result;
         
         public CustomJsonResult(OperationResult result, HttpStatusCode httpStatusCode)
@@ -28,18 +22,11 @@
 
         public override async Task ExecuteResultAsync(ActionContext context)
         {
-            if (this.result != null)
-            {
-                var serialized = JsonConvert.SerializeObject(this.result, Settings);
-                context.HttpContext.Response.ContentType = "application/json";
-                context.HttpContext.Response.Headers["Content-Encoding"] = "UTF-8";
-                await context.HttpContext.Response.WriteAsync(serialized);
-            }
-        }
-
-        public override void ExecuteResult(ActionContext context)
-        {
-            this.ExecuteResultAsync(context).ConfigureAwait(false).GetAwaiter().GetResult();
+            var serialized = JsonConvert.SerializeObject(this.result, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            context.HttpContext.Response.ContentType = "application/json";
+            context.HttpContext.Response.Headers["Content-Encoding"] = "UTF-8";
+            context.HttpContext.Response.StatusCode = this.StatusCode;
+            await context.HttpContext.Response.WriteAsync(serialized);
         }
     }
 }
