@@ -31,7 +31,13 @@
         {
             var connectionString = this.appConfiguration.GetConnectionString("DbConnection");
             services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
-            services.AddMvc(options => options.Filters.Add(typeof(ModelValidationFilterAttribute)));
+
+            services.AddMvc(options =>
+                {
+                    options.Filters.Add<UserPermissionFilter>();
+                    options.Filters.Add(typeof(ModelValidationFilterAttribute));
+                });
+
 
             services.AddTransient<IServicesRepository, ServicesRepository>();
             services.AddTransient<IUsersRepository, UsersRepository>();

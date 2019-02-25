@@ -1,11 +1,14 @@
 ﻿namespace Clinic.Controllers
 {
     using System.Threading.Tasks;
+    
+    using Clinic.DataAccess.Repositories;
+    using Clinic.Domain;
+    using Clinic.Support.Filters;
 
     using Microsoft.AspNetCore.Mvc;
 
-    using Clinic.DataAccess.Repositories;
-
+    [UserPermission(UserPermission.All)]
     [Route("services")]
     [ApiController]
     public class ServiceController : BaseController
@@ -25,16 +28,14 @@
             {
                 return this.Success(service);
             }
-            else
-            {
-                return this.Error("Услуга не найдена");
-            }
+
+            return this.Error("Услуга не найдена");
         }
 
         [HttpGet, Route("")]
         public async Task<IActionResult> All()
         {
-            return this.Success(await servicesRepository.All());
+            return this.Success(await this.servicesRepository.All());
         }
     }
 }

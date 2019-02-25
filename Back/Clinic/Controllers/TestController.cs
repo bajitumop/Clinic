@@ -1,7 +1,6 @@
 ﻿namespace Clinic.Controllers
 {
     using System.Threading.Tasks;
-    using System.Web;
 
     using Clinic.DataAccess.Repositories;
     using Clinic.Services;

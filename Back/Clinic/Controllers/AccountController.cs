@@ -11,6 +11,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
+    [AllowAnonymous]
     [Route("account")]
     public class AccountController : BaseController
     {
@@ -23,9 +24,7 @@
             this.cryptoService = cryptoService;
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("register")]
+        [HttpPost, Route("register")]
         public async Task<IActionResult> Register(RegisterModel registerModel)
         {
             var user = await this.usersRepository.GetByUserName(registerModel.UserName);
@@ -51,9 +50,7 @@
             return this.Success(this.GenerateAccessToken(user.Id));
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("login")]
+        [HttpPost, Route("login")]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
             var user = await this.usersRepository.GetByUserName(loginModel.UserName);
