@@ -3,12 +3,9 @@
     using System.Threading.Tasks;
     
     using Clinic.DataAccess.Repositories;
-    using Clinic.Domain;
-    using Clinic.Support.Filters;
 
     using Microsoft.AspNetCore.Mvc;
 
-    [UserPermission(UserPermission.All)]
     [Route("services")]
     [ApiController]
     public class ServiceController : BaseController
