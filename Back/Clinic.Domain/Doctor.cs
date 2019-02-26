@@ -24,5 +24,9 @@
         public string[] Positions { get; set; }
 
         public ICollection<Schedule> Schedules { get; set; }
+
+        public ICollection<Visit> Visits { get; set; }
+
+        public int Room { get; set; }
     }
 }

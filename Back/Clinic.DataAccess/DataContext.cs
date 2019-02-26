@@ -22,8 +22,10 @@
 
         public DbSet<Schedule> Schedules { get; set; }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<Visit> Visits { get; set; }
 
+        public DbSet<User> Users { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Schedule>().HasKey(c => new { c.DoctorId, c.SpecialtyId });
