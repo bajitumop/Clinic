@@ -1,5 +1,7 @@
 ﻿namespace Clinic
 {
+    using System;
+
     using Clinic.DataAccess;
     using Clinic.DataAccess.Implementations;
     using Clinic.DataAccess.Repositories;
@@ -15,14 +17,18 @@
 
     using Newtonsoft.Json;
 
+    using Npgsql;
+
     using Swashbuckle.AspNetCore.Swagger;
 
     public class Startup
     {
+        private readonly IHostingEnvironment environment;
         private readonly IConfigurationRoot appConfiguration;
 
         public Startup(IHostingEnvironment env)
         {
+            this.environment = env;
             this.appConfiguration = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json")
@@ -31,7 +37,34 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = this.appConfiguration.GetConnectionString("DbConnection");
+            string connectionString;
+            if (this.environment.IsDevelopment())
+            {
+                connectionString = this.appConfiguration.GetConnectionString("DbConnection");
+            }
+            else
+            {
+                var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+                var databaseUri = new Uri(databaseUrl);
+                var userInfo = databaseUri.UserInfo.Split(':');
+
+                var builder = new NpgsqlConnectionStringBuilder
+                                  {
+                                      Host = databaseUri.Host,
+                                      Port = databaseUri.Port,
+                                      Username = userInfo[0],
+                                      Password = userInfo[1],
+                                      Database = databaseUri.LocalPath.TrimStart('/')
+                                  };
+
+                connectionString = builder.ToString();
+            }
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("Db connection string is empty!");
+            }
+            
             services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
 
             services.AddMvc(options =>
@@ -47,10 +80,7 @@
             services.AddTransient<DatabaseInitializer>();
             services.AddSingleton(new CryptoService(JsonConvert.DeserializeObject<byte[]>(this.appConfiguration["AccessTokenSymmetricKey"])));
 
-            services.AddSwaggerGen(c =>
-                {
-                    c.SwaggerDoc("v1", new Info { Title = "Clinic API", Version = "v1" });
-                });
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "Clinic API", Version = "v1" }); });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
