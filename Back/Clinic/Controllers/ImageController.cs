@@ -9,11 +9,11 @@
 
     [ApiController]
     [Route("images")]
-    public class ImagesController : BaseController
+    public class ImageController : BaseController
     {
         private readonly IImagesRepository imagesRepository;
 
-        public ImagesController(IImagesRepository imagesRepository)
+        public ImageController(IImagesRepository imagesRepository)
         {
             this.imagesRepository = imagesRepository;
         }

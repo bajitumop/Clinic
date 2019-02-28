@@ -71,6 +71,7 @@
             services.AddTransient<IServicesRepository, ServicesRepository>();
             services.AddTransient<IUsersRepository, UsersRepository>();
             services.AddTransient<IImagesRepository, ImagesRepository>();
+            services.AddTransient<IDoctorsRepository, DoctorsRepository>();
             services.AddTransient<DatabaseInitializer>();
             services.AddSingleton(new CryptoService(JsonConvert.DeserializeObject<byte[]>(this.appConfiguration["AccessTokenSymmetricKey"])));
 
