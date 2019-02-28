@@ -15,6 +15,8 @@
 
     using Newtonsoft.Json;
 
+    using Swashbuckle.AspNetCore.Swagger;
+
     public class Startup
     {
         private readonly IConfigurationRoot appConfiguration;
@@ -44,10 +46,18 @@
             services.AddTransient<IImagesRepository, ImagesRepository>();
             services.AddTransient<DatabaseInitializer>();
             services.AddSingleton(new CryptoService(JsonConvert.DeserializeObject<byte[]>(this.appConfiguration["AccessTokenSymmetricKey"])));
+
+            services.AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new Info { Title = "Clinic API", Version = "v1" });
+                });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
+
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
             app.UseMvc(routeBuilder => routeBuilder.MapRoute("default", "{controller}/{action}/{id?}"));
