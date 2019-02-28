@@ -1,6 +1,7 @@
 ﻿namespace Clinic.DataAccess
 {
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Clinic.Domain;
 
@@ -25,6 +26,8 @@
         public DbSet<Visit> Visits { get; set; }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Image> Images { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

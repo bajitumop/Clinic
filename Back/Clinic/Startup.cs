@@ -41,22 +41,15 @@
 
             services.AddTransient<IServicesRepository, ServicesRepository>();
             services.AddTransient<IUsersRepository, UsersRepository>();
+            services.AddTransient<IImagesRepository, ImagesRepository>();
+            services.AddTransient<DatabaseInitializer>();
             services.AddSingleton(new CryptoService(JsonConvert.DeserializeObject<byte[]>(this.appConfiguration["AccessTokenSymmetricKey"])));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseMiddleware<ErrorHandlingMiddleware>();
-
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                serviceScope.ServiceProvider.GetRequiredService<DataContext>().Database.Migrate();
-            }
-            
-            app.UseStaticFiles();
-
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
-
             app.UseMvc(routeBuilder => routeBuilder.MapRoute("default", "{controller}/{action}/{id?}"));
         }
     }

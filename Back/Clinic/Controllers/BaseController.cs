@@ -9,7 +9,7 @@
 
     public class BaseController : ControllerBase
     {
-        protected IActionResult Success(HttpStatusCode statusCode = HttpStatusCode.NoContent)
+        protected IActionResult Success(HttpStatusCode statusCode = HttpStatusCode.OK)
             => new CustomJsonResult(new OperationResult(true), statusCode);
 
         protected IActionResult Success<T>(T data, string message = null, HttpStatusCode statusCode = HttpStatusCode.OK)

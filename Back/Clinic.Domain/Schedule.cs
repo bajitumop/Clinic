@@ -40,5 +40,7 @@
         public TimeSpan? SaturdayStart { get; set; }
 
         public TimeSpan? SaturdayEnd { get; set; }
+
+        public TimeSpan VisitTime { get; set; }
     }
 }

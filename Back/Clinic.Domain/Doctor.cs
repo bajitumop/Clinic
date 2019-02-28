@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class Doctor : Entity
     {
@@ -17,7 +18,10 @@
         [Required]
         public string ThirdName { get; set; }
 
-        public string ImageUrl { get; set; }
+        [ForeignKey(nameof(ImageId))]
+        public Image Image { get; set; }
+
+        public long? ImageId { get; set; }
 
         public string Info { get; set; }
 
