@@ -38,7 +38,7 @@
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionString;
-            if (this.environment.IsDevelopment())
+            if (!this.environment.IsProduction())
             {
                 connectionString = this.appConfiguration.GetConnectionString("DbConnection");
             }
@@ -60,11 +60,6 @@
                 connectionString = builder.ToString();
             }
 
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new InvalidOperationException("Db connection string is empty!");
-            }
-            
             services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
 
             services.AddMvc(options =>
@@ -72,7 +67,6 @@
                     options.Filters.Add<UserPermissionFilter>();
                     options.Filters.Add(typeof(ModelValidationFilterAttribute));
                 });
-
 
             services.AddTransient<IServicesRepository, ServicesRepository>();
             services.AddTransient<IUsersRepository, UsersRepository>();
