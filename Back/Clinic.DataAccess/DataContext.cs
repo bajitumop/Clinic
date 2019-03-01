@@ -1,7 +1,7 @@
 ﻿namespace Clinic.DataAccess
 {
+    using System;
     using System.Linq;
-    using System.Threading.Tasks;
 
     using Clinic.Domain;
 
@@ -40,6 +40,9 @@
                 .HasOne(sc => sc.Specialty)
                 .WithMany(d => d.Schedules)
                 .HasForeignKey(sc => sc.SpecialtyId);
+            modelBuilder.Entity<Schedule>().Property(u => u.Weekdays).HasConversion(
+                weekdays => JsonConvert.SerializeObject(weekdays),
+                dbValue => JsonConvert.DeserializeObject<DateTime[]>(dbValue));
 
             modelBuilder.Entity<User>().Property(u => u.Permissions).HasConversion(
                 permissions => JsonConvert.SerializeObject(permissions.Select(p => $"{p:G}")),
