@@ -2,9 +2,12 @@
 {
     using System;
 
+    using AutoMapper;
+
     using Clinic.DataAccess;
     using Clinic.DataAccess.Implementations;
     using Clinic.DataAccess.Repositories;
+    using Clinic.Mappings;
     using Clinic.Middlewares;
     using Clinic.Services;
     using Clinic.Support.Filters;
@@ -74,6 +77,9 @@
             services.AddTransient<IDoctorsRepository, DoctorsRepository>();
             services.AddTransient<DatabaseInitializer>();
             services.AddSingleton(new CryptoService(JsonConvert.DeserializeObject<byte[]>(this.appConfiguration["AccessTokenSymmetricKey"])));
+
+            var m = MapperBuilder.Build();
+            services.AddSingleton(MapperBuilder.Build());
 
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "Clinic API", Version = "v1" }); });
         }

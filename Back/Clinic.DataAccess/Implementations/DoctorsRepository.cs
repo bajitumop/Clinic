@@ -16,7 +16,7 @@
         {
         }
 
-        public async Task<IEnumerable<Doctor>> GetBySpecialty(long specialtyId)
+        public async Task<IEnumerable<Doctor>> GetBySpecialtyAsync(long specialtyId)
         {
             return await this.Entities.Where(d => d.Schedules.Any(s => s.SpecialtyId == specialtyId)).ToArrayAsync();
         }

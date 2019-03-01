@@ -12,6 +12,6 @@
 
         public long? ImageId { get; set; }
 
-        public string[] Positions { get; set; }
+        public SpecialtyModel[] Specialties { get; set; }
     }
 }

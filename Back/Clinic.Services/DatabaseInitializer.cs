@@ -89,7 +89,8 @@
                         FridayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Friday]?[1],
                         SaturdayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Saturday]?[0],
                         SaturdayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Saturday]?[1],
-                        VisitTime = TimeSpan.FromMinutes(10)
+                        VisitDuration = TimeSpan.FromMinutes(10),
+                        Weekdays = new List<DateTime>()
                     };
 
                     schedules.Add(schedule);

@@ -7,6 +7,6 @@
 
     public interface IDoctorsRepository : IRepository<Doctor>
     {
-        Task<IEnumerable<Doctor>> GetBySpecialty(long specialtyId);
+        Task<IEnumerable<Doctor>> GetBySpecialtyAsync(long specialtyId);
     }
 }

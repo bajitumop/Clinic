@@ -4,8 +4,9 @@
     using System.Net;
     using System.Threading.Tasks;
 
+    using AutoMapper;
+
     using Clinic.DataAccess.Repositories;
-    using Clinic.Domain;
     using Clinic.Models.Doctors;
 
     using Microsoft.AspNetCore.Mvc;
@@ -15,17 +16,19 @@
     public class DoctorController : BaseController
     {
         private readonly IDoctorsRepository doctorsRepository;
+        private readonly IMapper mapper;
 
-        public DoctorController(IDoctorsRepository doctorsRepository)
+        public DoctorController(IDoctorsRepository doctorsRepository, IMapper mapper)
         {
             this.doctorsRepository = doctorsRepository;
+            this.mapper = mapper;
         }
 
         [HttpGet, Route("")]
         public async Task<IActionResult> GetAll()
         {
             var doctors = await this.doctorsRepository.All();
-            return this.Success(doctors.Select(this.MapToShortModel).ToArray());
+            return this.Success(doctors.Select(this.mapper.Map<DoctorShortModel>).ToArray());
         }
 
         [HttpGet, Route("{id}")]
@@ -37,42 +40,14 @@
                 return this.Error("Доктор с указанным id не найден в базе", HttpStatusCode.NotFound);
             }
 
-            return this.Success(this.MapToFullModel(doctor));
+            return this.Success(this.mapper.Map<DoctorModel>(doctor));
         }
 
         [HttpGet, Route("by-specialty")]
         public async Task<IActionResult> GetBySpecialty(long specialtyId)
         {
-            var doctors = await this.doctorsRepository.GetBySpecialty(specialtyId);
-            return this.Success(doctors.Select(this.MapToShortModel).ToArray());
-        }
-
-        private DoctorShortModel MapToShortModel(Doctor doctor)
-        {
-            return new DoctorShortModel
-                       {
-                           Id = doctor.Id,
-                           FirstName = doctor.FirstName,
-                           SecondName = doctor.SecondName,
-                           ThirdName = doctor.ThirdName,
-                           Positions = doctor.Positions,
-                           ImageId = doctor.ImageId
-                       };
-        }
-
-        private DoctorModel MapToFullModel(Doctor doctor)
-        {
-            return new DoctorModel
-                       {
-                           Id = doctor.Id,
-                           FirstName = doctor.FirstName,
-                           SecondName = doctor.SecondName,
-                           ThirdName = doctor.ThirdName,
-                           Positions = doctor.Positions,
-                           ImageId = doctor.ImageId,
-                           Info = doctor.Info,
-                           Room = doctor.Room
-                       };
+            var doctors = await this.doctorsRepository.GetBySpecialtyAsync(specialtyId);
+            return this.Success(doctors.Select(this.mapper.Map<DoctorShortModel>).ToArray());
         }
     }
 }
