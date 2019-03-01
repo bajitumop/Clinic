@@ -18,19 +18,19 @@
             this.Entities = dataContext.Set<T>();
         }
 
-        protected IQueryable<T> Entities { get; }
+        protected DbSet<T> Entities { get; }
 
-        public async Task<T> GetAsync(long id)
+        public virtual async Task<T> GetAsync(long id)
         {
             return await this.dataContext.Set<T>().FindAsync(id);
         }
 
-        public async Task<List<T>> All()
+        public virtual async Task<List<T>> All()
         {
             return await this.Entities.ToListAsync();
         }
 
-        public async Task DeleteAsync(long id)
+        public virtual async Task DeleteAsync(long id)
         {
             var entity = await this.GetAsync(id);
             if (entity != null)
@@ -39,22 +39,22 @@
             }
         }
 
-        public void Delete(T entity)
+        public virtual void Delete(T entity)
         {
             this.dataContext.Set<T>().Remove(entity);
         }
 
-        public void Update(T entity)
+        public virtual void Update(T entity)
         {
             this.dataContext.Set<T>().Update(entity);
         }
 
-        public void Create(T entity)
+        public virtual void Create(T entity)
         {
             this.dataContext.Set<T>().Add(entity);
         }
 
-        public async Task SaveChangesAsync()
+        public virtual async Task SaveChangesAsync()
         {
             await this.dataContext.SaveChangesAsync();
         }
