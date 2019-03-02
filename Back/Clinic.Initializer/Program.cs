@@ -2,17 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
 
     using Clinic.DataAccess;
-    using Clinic.Domain;
-    using Clinic.Services;
 
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
-
-    using Newtonsoft.Json;
 
     public class Program
     {
@@ -20,13 +15,7 @@
         
         public static void Main(string[] args)
         {
-            var actions = new Dictionary<string, Action>
-                {
-                    ["Migrate db"] = MigrateDb,
-                    ["Create admin"] = CreateAdmin,
-                    ["Run heroku psql"] = RunHerokuPsql
-                }
-                .ToArray();
+            var actions = new Dictionary<string, Action>().ToArray();
 
             var choice = args.Any() ? args[0] : null;
             if (choice == null)
@@ -53,44 +42,6 @@
 
             Console.WriteLine("Done");
             Console.ReadLine();
-        }
-
-        private static void RunHerokuPsql()
-        {
-            Process.Start("CMD.exe", "heroku pg:psql");
-        }
-
-        private static void MigrateDb()
-        {
-            using (var dataContext = GetDataContext())
-            {
-                dataContext.Database.Migrate();
-            }
-        }
-
-        private static void CreateAdmin()
-        {
-            var cryptoService = new CryptoService(JsonConvert.DeserializeObject<byte[]>(AppConfiguration["AccessTokenSymmetricKey"]));
-            using (var dataContext = GetDataContext())
-            {
-                var user = new User
-                {
-                    Username = "admin",
-                    FirstName = "Администратор",
-                    SecondName = "Администратор",
-                    ThirdName = "Администратор",
-                    Permission = UserPermission.All,
-                    Phone = 89999999999,
-                    PasswordHash = "admin",
-                };
-
-                dataContext.Users.Add(user);
-                dataContext.SaveChanges();
-
-                var token = cryptoService.Encrypt(user.Username);
-                user.PasswordHash = token;
-                dataContext.SaveChanges();
-            }
         }
 
         private static DataContext GetDataContext()

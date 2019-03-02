@@ -7,7 +7,7 @@
 
     public interface IRepository<T> where T : Entity
     {
-        Task<T> GetAsync(long id);
+        Task<T> GetAsync(object id);
 
         Task<List<T>> All();
 

@@ -20,7 +20,7 @@
 
         protected DbSet<T> Entities { get; }
 
-        public virtual async Task<T> GetAsync(long id)
+        public virtual async Task<T> GetAsync(object id)
         {
             return await this.dataContext.Set<T>().FindAsync(id);
         }

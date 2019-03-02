@@ -67,8 +67,9 @@
 
             services.AddMvc(options =>
                 {
-                    options.Filters.Add<UserPermissionFilter>();
-                    options.Filters.Add(typeof(ModelValidationFilterAttribute));
+                    options.Filters.Add<AuthenticationFilter>();
+                    options.Filters.Add<AuthorizationFilter>();
+                    options.Filters.Add<ModelValidationFilterAttribute>();
                 });
 
             services.AddTransient<IServicesRepository, ServicesRepository>();

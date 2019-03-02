@@ -1,5 +1,6 @@
 ﻿namespace Clinic.DataAccess.Implementations
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -21,9 +22,9 @@
             return await this.Entities.Where(d => d.Specialty.Id == specialtyId).Include(s => s.Specialty).ToArrayAsync();
         }
 
-        public override async Task<Service> GetAsync(long id)
+        public override async Task<Service> GetAsync(object id)
         {
-            return await this.Entities.Include(s => s.Specialty).FirstOrDefaultAsync(s => s.Id == id);
+            return await this.Entities.Include(s => s.Specialty).FirstOrDefaultAsync(s => s.Id == (long)id);
         }
 
         public override async Task<List<Service>> All()
