@@ -45,11 +45,11 @@
         {
             var user = new User
             {
-                UserName = "admin",
+                Username = "admin",
                 FirstName = "Администратор",
                 SecondName = "Администратор",
                 ThirdName = "Администратор",
-                Permissions = new[] { UserPermission.All },
+                Permission = UserPermission.All,
                 Phone = 89999999999,
                 PasswordHash = "admin",
             };
@@ -57,7 +57,7 @@
             this.dataContext.Users.Add(user);
             this.dataContext.SaveChanges();
 
-            var token = cryptoService.Encrypt(user.Id);
+            var token = this.cryptoService.Encrypt(user.Username);
             user.PasswordHash = token;
             this.dataContext.SaveChanges();
 

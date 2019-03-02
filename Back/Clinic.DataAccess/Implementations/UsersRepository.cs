@@ -17,7 +17,7 @@
         
         public async Task<User> GetByUserName(string userName)
         {
-            return await this.Entities.FirstOrDefaultAsync(user => user.UserName == userName);
+            return await this.Entities.FirstOrDefaultAsync(user => user.Username == userName);
         }
     }
 }

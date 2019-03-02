@@ -5,10 +5,7 @@
     public class User : Entity
     {
         [Key]
-        public long Id { get; set; }
-
-        [Required]
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         [Required]
         public string PasswordHash { get; set; }
@@ -24,6 +21,6 @@
         [Required]
         public long Phone { get; set; }
         
-        public UserPermission[] Permissions { get; set; }
+        public UserPermission Permission { get; set; }
     }
 }

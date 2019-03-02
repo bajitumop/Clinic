@@ -43,10 +43,6 @@
             modelBuilder.Entity<Schedule>().Property(u => u.Weekdays).HasConversion(
                 weekdays => JsonConvert.SerializeObject(weekdays),
                 dbValue => JsonConvert.DeserializeObject<DateTime[]>(dbValue));
-
-            modelBuilder.Entity<User>().Property(u => u.Permissions).HasConversion(
-                permissions => JsonConvert.SerializeObject(permissions.Select(p => $"{p:G}")),
-                dbValue => JsonConvert.DeserializeObject<UserPermission[]>(dbValue));
         }
     }
 }

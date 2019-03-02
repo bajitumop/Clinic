@@ -1,5 +1,4 @@
-﻿
-namespace Clinic.Controllers
+﻿namespace Clinic.Controllers
 {
     using Clinic.Domain;
     using Clinic.Support.Filters;

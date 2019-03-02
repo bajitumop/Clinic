@@ -35,19 +35,19 @@
 
             user = new User
                        {
-                           UserName = registerModel.UserName,
+                           Username = registerModel.UserName,
                            PasswordHash = registerModel.PasswordHash,
                            FirstName = registerModel.FirstName,
                            SecondName = registerModel.SecondName,
                            ThirdName = registerModel.ThirdName,
                            Phone = registerModel.Phone,
-                           Permissions = new[] { UserPermission.CanVisitDoctor },
+                           Permission = UserPermission.CanVisitDoctor,
                        };
 
             this.usersRepository.Create(user);
             await this.usersRepository.SaveChangesAsync();
 
-            return this.Success(this.GenerateAccessToken(user.Id));
+            return this.Success(this.GenerateAccessToken(user.Username));
         }
 
         [HttpPost, Route("login")]
@@ -64,12 +64,12 @@
                 return this.Error("Указано неверное имя пользователя или пароль");
             }
 
-            return this.Success(this.GenerateAccessToken(user.Id));
+            return this.Success(this.GenerateAccessToken(user.Username));
         }
         
-        private string GenerateAccessToken(long id)
+        private string GenerateAccessToken(string username)
         {
-            return HttpUtility.UrlEncode(this.cryptoService.Encrypt(id));
+            return HttpUtility.UrlEncode(this.cryptoService.Encrypt(username));
         }
     }
 }

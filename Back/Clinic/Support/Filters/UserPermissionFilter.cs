@@ -7,7 +7,6 @@
     using System.Threading.Tasks;
 
     using Clinic.DataAccess.Repositories;
-    using Clinic.Domain;
     using Clinic.Models.OperationResults;
     using Clinic.Services;
     using Clinic.Support.ActionResults;
@@ -69,10 +68,8 @@
                     context.Result = new CustomJsonResult(operationResult, HttpStatusCode.Unauthorized);
                     return;
                 }
-
-                var permission = user.Permissions.Aggregate(default(UserPermission), (acc, nxt) => acc | nxt);
                 
-                if ((requiredUserPermission & permission) != requiredUserPermission)
+                if ((requiredUserPermission & user.Permission) != requiredUserPermission)
                 {
                     var operationResult = new OperationResult(false, "Не хватает прав для совершения этой операции");
                     context.Result = new CustomJsonResult(operationResult, HttpStatusCode.Forbidden);
