@@ -22,9 +22,9 @@
             return await this.Entities.Where(d => d.Specialty.Id == specialtyId).Include(s => s.Specialty).ToArrayAsync();
         }
 
-        public override async Task<Service> GetAsync(object id)
+        public async Task<Service> GetAsync(long id)
         {
-            return await this.Entities.Include(s => s.Specialty).FirstOrDefaultAsync(s => s.Id == (long)id);
+            return await this.Entities.Include(s => s.Specialty).FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public override async Task<List<Service>> All()

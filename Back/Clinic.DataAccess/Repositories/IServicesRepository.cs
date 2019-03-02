@@ -8,5 +8,7 @@
     public interface IServicesRepository : IRepository<Service>
     {
         Task<IEnumerable<Service>> GetBySpecialtyAsync(long specialtyId);
+
+        Task<Service> GetAsync(long id);
     }
 }
