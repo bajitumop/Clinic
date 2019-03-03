@@ -25,7 +25,7 @@
                 return;
             }
 
-            if (!context.HttpContext.Items.TryGetValue("User", out var userObj) || !(userObj is User user))
+            if (!context.HttpContext.Items.TryGetValue(nameof(User), out var userObj) || !(userObj is User user))
             {
                 var operationResult = new OperationResult(false, "Пользователь должен быть авторизован в системе");
                 context.Result = new CustomJsonResult(operationResult, HttpStatusCode.Forbidden);

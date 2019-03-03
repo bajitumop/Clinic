@@ -15,9 +15,9 @@
         {
         }
         
-        public async Task<User> GetByUserName(string userName)
+        public async Task<bool> IsLastAdmin(string username)
         {
-            return await this.Entities.FirstOrDefaultAsync(user => user.Username == userName);
+            return !(await this.Entities.AnyAsync(user => user.Permission == UserPermission.All && user.Username != username));
         }
     }
 }

@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
 
     using Clinic.DataAccess.Repositories;
+    using Clinic.Domain;
     using Clinic.Models.OperationResults;
     using Clinic.Services;
     using Clinic.Support.ActionResults;
@@ -55,7 +56,7 @@
                     return;
                 }
 
-                context.HttpContext.Items["User"] = user;
+                context.HttpContext.Items[nameof(User)] = user;
                 await next();
             }
             catch (Exception)

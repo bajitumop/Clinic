@@ -3,6 +3,8 @@
     using System.Threading.Tasks;
     using System.Web;
 
+    using AutoMapper;
+
     using Clinic.DataAccess.Repositories;
     using Clinic.Domain;
     using Clinic.Models.Authorization;
@@ -17,32 +19,25 @@
     {
         private readonly IUsersRepository usersRepository;
         private readonly CryptoService cryptoService;
+        private readonly IMapper mapper;
         
-        public AccountController(IUsersRepository usersRepository, CryptoService cryptoService)
+        public AccountController(IUsersRepository usersRepository, CryptoService cryptoService, IMapper mapper)
         {
             this.usersRepository = usersRepository;
             this.cryptoService = cryptoService;
+            this.mapper = mapper;
         }
 
         [HttpPost, Route("register")]
         public async Task<IActionResult> Register(RegisterModel registerModel)
         {
-            var user = await this.usersRepository.GetByUserName(registerModel.UserName);
-            if (user != null)
+            if (await this.usersRepository.GetAsync(registerModel.Username) != null)
             {
                 return this.Error("Имя пользователя занято");
             }
 
-            user = new User
-                       {
-                           Username = registerModel.UserName,
-                           PasswordHash = registerModel.PasswordHash,
-                           FirstName = registerModel.FirstName,
-                           SecondName = registerModel.SecondName,
-                           ThirdName = registerModel.ThirdName,
-                           Phone = registerModel.Phone,
-                           Permission = UserPermission.CanVisitDoctor,
-                       };
+            var user = this.mapper.Map<User>(registerModel);
+            user.Permission = UserPermission.CanVisitDoctor;
 
             this.usersRepository.Create(user);
             await this.usersRepository.SaveChangesAsync();
@@ -53,7 +48,7 @@
         [HttpPost, Route("login")]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
-            var user = await this.usersRepository.GetByUserName(loginModel.UserName);
+            var user = await this.usersRepository.GetAsync(loginModel.Username);
             if (user == null)
             {
                 return this.Error("Пользователь с таким именем не существует в базе");

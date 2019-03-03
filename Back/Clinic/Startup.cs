@@ -1,9 +1,7 @@
 ﻿namespace Clinic
 {
     using System;
-
-    using AutoMapper;
-
+    
     using Clinic.DataAccess;
     using Clinic.DataAccess.Implementations;
     using Clinic.DataAccess.Repositories;
@@ -14,6 +12,7 @@
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -69,8 +68,14 @@
                 {
                     options.Filters.Add<AuthenticationFilter>();
                     options.Filters.Add<AuthorizationFilter>();
+                    options.Filters.Add<MustBeAuthorizedFilter>();
                     options.Filters.Add<ModelValidationFilterAttribute>();
                 });
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
 
             services.AddTransient<IServicesRepository, ServicesRepository>();
             services.AddTransient<IUsersRepository, UsersRepository>();
@@ -80,7 +85,6 @@
             services.AddTransient<DatabaseInitializer>();
             services.AddSingleton(new CryptoService(JsonConvert.DeserializeObject<byte[]>(this.appConfiguration["AccessTokenSymmetricKey"])));
 
-            var m = MapperBuilder.Build();
             services.AddSingleton(MapperBuilder.Build());
 
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "Clinic API", Version = "v1" }); });

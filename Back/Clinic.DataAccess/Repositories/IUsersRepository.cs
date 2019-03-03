@@ -6,6 +6,6 @@
 
     public interface IUsersRepository : IRepository<User>
     {
-        Task<User> GetByUserName(string userName);
+        Task<bool> IsLastAdmin(string username);
     }
 }
