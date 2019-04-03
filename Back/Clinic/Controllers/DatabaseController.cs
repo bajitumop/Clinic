@@ -1,67 +1,49 @@
 ﻿namespace Clinic.Controllers
 {
+    using System.Data;
     using System.Threading.Tasks;
-
-    using Clinic.DataAccess;
-    using Clinic.Domain;
-    using Clinic.Services;
-
+    using Services;
+    using Dapper;
+    using DataAccess.Repositories;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
 
-    // Uncomment when production db was created
-    //[UserPermission(UserPermission.All)]
+    // ToDo: remove in production
     [ApiController]
     [Route("database")]
     public class DatabaseController : BaseController
     {
-        private readonly DataContext dataContext;
         private readonly DatabaseInitializer databaseInitializer;
         private readonly CryptoService cryptoService;
+        private readonly IUsersRepository usersRepository;
+        private readonly IDbConnection connection;
 
-        public DatabaseController(DataContext dataContext, DatabaseInitializer databaseInitializer, CryptoService cryptoService)
+        public DatabaseController(DatabaseInitializer databaseInitializer, CryptoService cryptoService, IUsersRepository usersRepository, IDbConnection connection)
         {
-            this.dataContext = dataContext;
             this.databaseInitializer = databaseInitializer;
             this.cryptoService = cryptoService;
+            this.usersRepository = usersRepository;
+            this.connection = connection;
         }
-
-        [HttpPost, Route("migrate")]
-        public async Task<IActionResult> MigrateDb()
-        {
-            await this.dataContext.Database.MigrateAsync();
-            return this.Success();
-        }
-
+        
         [HttpPost, Route("init")]
         public async Task<IActionResult> InitDb()
         {
             await this.databaseInitializer.Init();
             return this.Success();
         }
-
-        [HttpPost, Route("createAdmin")]
-        public IActionResult CreateAdmin()
+        
+        [HttpDelete, Route("drop-create")]
+        public async Task<IActionResult> Truncate()
         {
-            var user = new User
-            {
-                Username = "admin",
-                FirstName = "Администратор",
-                SecondName = "Администратор",
-                ThirdName = "Администратор",
-                Permission = UserPermission.All,
-                Phone = 89999999999,
-                PasswordHash = "admin",
-            };
+            await this.connection.ExecuteAsync("truncate table users");
+            await this.connection.ExecuteAsync("truncate table weekdays");
+            await this.connection.ExecuteAsync("truncate table services");
+            await this.connection.ExecuteAsync("truncate table schedules");
+            await this.connection.ExecuteAsync("truncate table images");
+            await this.connection.ExecuteAsync("truncate table visits");
+            await this.connection.ExecuteAsync("delete from doctors");
 
-            this.dataContext.Users.Add(user);
-            this.dataContext.SaveChanges();
-
-            var token = this.cryptoService.Encrypt(user.Username);
-            user.PasswordHash = token;
-            this.dataContext.SaveChanges();
-
-            return this.Success();
+            return await this.InitDb();
         }
     }
 }

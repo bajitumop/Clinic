@@ -18,7 +18,7 @@
             this.imagesRepository = imagesRepository;
         }
 
-        [HttpGet, Route("get")]
+        [HttpGet, Route("doctors/{id:long}")]
         public async Task<IActionResult> Get(long id)
         {
             var image = await this.imagesRepository.GetAsync(id);

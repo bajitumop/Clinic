@@ -3,10 +3,18 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using Clinic.Domain;
+    using Domain;
 
-    public interface IDoctorsRepository : IRepository<Doctor>
+    public interface IDoctorsRepository
     {
-        Task<IEnumerable<Doctor>> GetBySpecialtyAsync(long specialtyId);
+        Task<IList<Doctor>> GetBySpecialtyAsync(string specialtyId);
+
+        Task<IList<Doctor>> All();
+
+        Task<Doctor> GetAsync(long id);
+
+        Task CreateAsync(Doctor doctor);
+
+        Task Delete(long id);
     }
 }

@@ -6,11 +6,11 @@
     using System.Net;
     using System.Threading.Tasks;
 
-    using Clinic.DataAccess.Repositories;
-    using Clinic.Domain;
-    using Clinic.Models.OperationResults;
-    using Clinic.Services;
-    using Clinic.Support.ActionResults;
+    using DataAccess.Repositories;
+    using Domain;
+    using Models.OperationResults;
+    using Services;
+    using ActionResults;
 
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.Net.Http.Headers;

@@ -2,24 +2,19 @@
 {
     using System;
     using System.Threading.Tasks;
-
-    using Clinic.DataAccess;
-    using Clinic.Services;
+    using Services;
 
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
 
     [Route("test")]
     [ApiController]
     public class TestController : BaseController
     {
         private readonly CryptoService cryptoService;
-        private readonly DataContext context;
 
-        public TestController(CryptoService cryptoService, DataContext context)
+        public TestController(CryptoService cryptoService)
         {
             this.cryptoService = cryptoService;
-            this.context = context;
         }
 
         [HttpGet]
@@ -28,10 +23,17 @@
         {
             return this.cryptoService.Decrypt<long>(accessToken);
         }
-        
-        [HttpGet, Route("addweekdays")]
+
+        [HttpGet, Route("fallback")]
+        public string Fallback()
+        {
+            return "This is the default fallback answer";
+        }
+
+        /*[HttpGet, Route("addweekdays")]
         public async Task<IActionResult> AddWeekdays()
         {
+            throw new NotImplementedException();
             var schedules = await context.Schedules.ToListAsync();
             foreach (var schedule in schedules)
             {
@@ -51,6 +53,6 @@
             this.context.Schedules.UpdateRange(schedules);
             await this.context.SaveChangesAsync();
             return this.Success();
-        }
+        }*/
     }
 }

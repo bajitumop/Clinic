@@ -1,19 +1,18 @@
 ﻿namespace Clinic
 {
     using System;
-    
-    using Clinic.DataAccess;
-    using Clinic.DataAccess.Implementations;
-    using Clinic.DataAccess.Repositories;
-    using Clinic.Mappings;
-    using Clinic.Middlewares;
-    using Clinic.Services;
-    using Clinic.Support.Filters;
+    using System.Data;
+    using DataAccess.Implementations;
+    using DataAccess.Repositories;
+    using Infrastructure.Routing;
+    using Mappings;
+    using Middlewares;
+    using Services;
+    using Support.Filters;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -62,14 +61,13 @@
                 connectionString = builder.ToString();
             }
 
-            services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionString));
-
             services.AddMvc(options =>
                 {
                     options.Filters.Add<AuthenticationFilter>();
                     options.Filters.Add<AuthorizationFilter>();
                     options.Filters.Add<MustBeAuthorizedFilter>();
                     options.Filters.Add<ModelValidationFilterAttribute>();
+                    options.Conventions.Insert(0, new RouteConvention(new RouteAttribute("api")));
                 });
 
             services.Configure<ApiBehaviorOptions>(options =>
@@ -77,12 +75,13 @@
                 options.SuppressModelStateInvalidFilter = true;
             });
 
+            services.AddTransient<IDbConnection>(serviceProvider => new NpgsqlConnection(connectionString));
             services.AddTransient<IServicesRepository, ServicesRepository>();
             services.AddTransient<IUsersRepository, UsersRepository>();
             services.AddTransient<IImagesRepository, ImagesRepository>();
             services.AddTransient<IDoctorsRepository, DoctorsRepository>();
-            services.AddTransient<ISpecialtiesRepository, SpecialtiesRepository>();
             services.AddTransient<ISchedulesRepository, SchedulesRepository>();
+            services.AddTransient<IVisitsRepository, VisitsRepository>();
             services.AddTransient<DatabaseInitializer>();
             services.AddSingleton(new CryptoService(JsonConvert.DeserializeObject<byte[]>(this.appConfiguration["AccessTokenSymmetricKey"])));
 
@@ -98,7 +97,7 @@
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
-            app.UseMvc(routeBuilder => routeBuilder.MapRoute("default", "{controller}/{action}/{id?}"));
+            app.UseMvc();
         }
     }
 }

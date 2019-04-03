@@ -10,21 +10,37 @@
 
     using AngleSharp.Html.Dom;
     using AngleSharp.Html.Parser;
-
-    using Clinic.DataAccess;
-    using Clinic.Domain;
+    using DataAccess.Repositories;
+    using Domain;
 
     using Microsoft.Extensions.Logging;
 
     public class DatabaseInitializer
     {
-        private readonly DataContext dataContext;
         private readonly ILogger logger;
+        private readonly IDoctorsRepository doctorsRepository;
+        private readonly IServicesRepository serviceRepository;
+        private readonly IImagesRepository imagesRepository;
+        private readonly ISchedulesRepository schedulesRepository;
+        private readonly IUsersRepository usersRepository;
+        private readonly CryptoService cryptoService;
 
-        public DatabaseInitializer(DataContext dataContext, ILogger<DatabaseInitializer> logger)
+        public DatabaseInitializer(
+            IDoctorsRepository doctorsRepository, 
+            IImagesRepository imagesRepository, 
+            IServicesRepository serviceRepository, 
+            ISchedulesRepository schedulesRepository,
+            IUsersRepository usersRepository,
+            CryptoService cryptoService,
+            ILogger<DatabaseInitializer> logger)
         {
-            this.dataContext = dataContext;
             this.logger = logger;
+            this.schedulesRepository = schedulesRepository;
+            this.usersRepository = usersRepository;
+            this.cryptoService = cryptoService;
+            this.serviceRepository = serviceRepository;
+            this.doctorsRepository = doctorsRepository;
+            this.imagesRepository = imagesRepository;
         }
 
         public async Task Init()
@@ -38,11 +54,9 @@
                 var scheduleParsingModels = await this.ParseScheduleParsingModels(webClient, htmlParser);
                 await this.DownloadDoctorImages(webClient, doctorParsingModels);
 
-                var schedules = new List<Schedule>();
-                var doctors = new List<Doctor>();
                 foreach (var scheduleParsingModel in scheduleParsingModels)
                 {
-                    var specialty = specialties.FirstOrDefault(x => x.Name == scheduleParsingModel.SpecialtyName);
+                    var specialty = specialties.FirstOrDefault(x => x == scheduleParsingModel.SpecialtyName);
 
                     var doctorParsingModel = doctorParsingModels.FirstOrDefault(
                         d => new[] { d.FirstName, d.SecondName, d.ThirdName }.Intersect(scheduleParsingModel.DoctorName).Count()
@@ -66,16 +80,21 @@
                         SecondName = doctorParsingModel.SecondName,
                         ThirdName = doctorParsingModel.ThirdName,
                         Info = doctorParsingModel.Info,
-                        Image = doctorParsingModel.Image == null
-                                ? null
-                                : new Image { Content = doctorParsingModel.Image, Format = doctorParsingModel.ImageFormat },
-                        Positions = doctorParsingModel.Positions,
-                        Schedules = new List<Schedule>()
+                        Positions = doctorParsingModel.Positions
                     };
+
+                    await this.doctorsRepository.CreateAsync(doctor);
                 
+                    if (doctorParsingModel.Image != null)
+                    {
+                        await this.imagesRepository.UpsertAsync(doctor.Id, doctorParsingModel.Image, doctorParsingModel.ImageFormat);
+                    }
+
+                    await this.AddWeekdays(doctor);
+
                     var schedule = new Schedule
                     {
-                        Doctor = doctor,
+                        DoctorId = doctor.Id,
                         Specialty = specialty,
                         MondayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Monday]?[0],
                         MondayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Monday]?[1],
@@ -89,31 +108,40 @@
                         FridayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Friday]?[1],
                         SaturdayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Saturday]?[0],
                         SaturdayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Saturday]?[1],
-                        VisitDuration = TimeSpan.FromMinutes(10),
-                        Weekdays = new List<DateTime>()
+                        VisitDuration = TimeSpan.FromMinutes(10)
                     };
 
-                    schedules.Add(schedule);
-                    specialty.Schedules.Add(schedule);
-                    doctor.Schedules.Add(schedule);
-                    doctors.Add(doctor);
+                    await this.schedulesRepository.UpsertAsync(schedule);
                 }
 
-                // random room
-                var currentRoom = 1;
-                foreach (var doctor in doctors)
+                foreach (var service in services)
                 {
-                    doctor.Room = currentRoom++;
+                    await this.serviceRepository.CreateAsync(service);
                 }
 
-                this.logger.LogInformation("Inserting data to db...");
-                this.dataContext.Schedules.AddRange(schedules);
-                this.dataContext.Services.AddRange(services);
-                /*this.dataContext.Doctors.AddRange(doctors.Where(x => x.Schedules.Any()));
-                this.dataContext.Specialties.AddRange(specialties);*/
-                await this.dataContext.SaveChangesAsync();
+                var admin = new User
+                {
+                    Username = "admin",
+                    FirstName = "Администратор",
+                    SecondName = "Администратор",
+                    ThirdName = "Администратор",
+                    UserPermission = UserPermission.All,
+                    Phone = 89999999999,
+                    PasswordHash = this.cryptoService.Encrypt("admin")
+                };
+                
+                await this.usersRepository.CreateAsync(admin);
+
+
+
                 this.logger.LogInformation("Import data was successfully finished");
             }
+        }
+
+        private async Task AddWeekdays(Doctor doctor)
+        {
+            // ToDo: Implement weekdays initializing 
+            this.logger.LogWarning("Implement weekdays initializing!");
         }
 
         private async Task<ScheduleParsingModel[]> ParseScheduleParsingModels(WebClient webClient, HtmlParser htmlParser)
@@ -187,17 +215,13 @@
                 .QuerySelectorAll("td")
                 .Last(x => x.TextContent.TrimStart().StartsWith("Цены на услуги"));
 
-            Specialty lastSpecialty = null;
+            var lastSpecialty = string.Empty;
             var services = new List<Service>();
             foreach (var row in priceListTable.QuerySelectorAll("tr"))
             {
                 if (row.Attributes?["bgcolor"] != null)
                 {
-                    lastSpecialty = new Specialty
-                    {
-                        Name = row.TextContent.Trim(),
-                        Schedules = new List<Schedule>()
-                    };
+                    lastSpecialty = row.TextContent.Trim();
                     continue;
                 }
 

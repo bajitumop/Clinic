@@ -2,16 +2,18 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class Service : Entity
+    public class Service
     {
         [Key]
         public long Id { get; set; }
 
         [Required]
-        public Specialty Specialty { get; set; }
+        public string Specialty { get; set; }
 
         [Required]
         public string Description { get; set; }
+
+        public DoctorPermission DoctorPermission { get; set; }
 
         [Required]
         public float Price { get; set; }

@@ -35,31 +35,9 @@
             }
 
             var user = this.mapper.Map(model, authorizedUser);
-            user.Permission = authorizedUser.Permission;
-            this.usersRepository.Update(user);
-            await this.usersRepository.SaveChangesAsync();
+            user.UserPermission = authorizedUser.UserPermission;
 
-            return this.Success();
-        }
-
-        [MustBeAuthorized]
-        [HttpDelete, Route("delete")]
-        public async Task<IActionResult> Delete(string username)
-        {
-            var authorizedUser = (User)this.HttpContext.Items[nameof(Domain.User)];
-            if (authorizedUser.Username != username)
-            {
-                return this.Error("Пользователю разрешено удалять только свою учетную запись");
-            }
-
-            if (await this.usersRepository.IsLastAdmin(username))
-            {
-                return this.Error("Запрещено удалять последнего администратора в системе");
-            }
-
-            this.usersRepository.Delete(authorizedUser);
-            await this.usersRepository.SaveChangesAsync();
-
+            await this.usersRepository.UpdateAsync(user);
             return this.Success();
         }
     }

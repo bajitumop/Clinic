@@ -30,7 +30,7 @@
             return this.Success(services.Select(this.mapper.Map<ServiceModel>).ToArray());
         }
 
-        [HttpGet, Route("get")]
+        [HttpGet, Route("{id:long}")]
         public async Task<IActionResult> Get(long id)
         {
             var service = await this.servicesRepository.GetAsync(id);
@@ -43,9 +43,9 @@
         }
 
         [HttpGet, Route("by-specialty")]
-        public async Task<IActionResult> GetBySpecialty(long specialtyId)
+        public async Task<IActionResult> GetBySpecialty(string specialty)
         {
-            var services = await this.servicesRepository.GetBySpecialtyAsync(specialtyId);
+            var services = await this.servicesRepository.GetBySpecialtyAsync(specialty);
             return this.Success(services.Select(this.mapper.Map<ServiceModel>).ToArray());
         }
     }

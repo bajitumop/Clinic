@@ -1,23 +1,16 @@
 ﻿namespace Clinic.Domain
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public class Schedule : Entity
+    public class Schedule
     {
         [Required]
         public long DoctorId { get; set; }
-
+        
         [Required]
-        public Doctor Doctor { get; set; }
-
-        [Required]
-        public long SpecialtyId { get; set; }
-
-        [Required]
-        public Specialty Specialty { get; set; }
-
+        public string Specialty { get; set; }
+        
         public TimeSpan? MondayStart { get; set; }
 
         public TimeSpan? MondayEnd { get; set; }
@@ -43,7 +36,5 @@
         public TimeSpan? SaturdayEnd { get; set; }
 
         public TimeSpan VisitDuration { get; set; }
-
-        public ICollection<DateTime> Weekdays { get; set; }
     }
 }

@@ -2,13 +2,13 @@
 {
     using System;
 
-    using Clinic.Models.Doctors;
+    using Doctors;
 
     public class ScheduleByWeekModel
     {
         public DoctorShortModel Doctor { get; set; }
 
-        public SpecialtyModel Specialty { get; set; }
+        public string Specialty { get; set; }
 
         public TimeSpan? MondayStart { get; set; }
 

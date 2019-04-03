@@ -2,12 +2,13 @@
 {
     using System.Net;
 
-    using Clinic.Models.OperationResults;
-    using Clinic.Support.ActionResults;
+    using Domain;
+    using Models.OperationResults;
+    using Support.ActionResults;
 
     using Microsoft.AspNetCore.Mvc;
 
-    public class BaseController : ControllerBase
+    public abstract class BaseController : ControllerBase
     {
         protected IActionResult Success(HttpStatusCode statusCode = HttpStatusCode.OK)
             => new CustomJsonResult(new OperationResult(true), statusCode);
@@ -20,5 +21,7 @@
 
         protected IActionResult Error<T>(T data, string message, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
             => new CustomJsonResult(new ContentOperationResult<T>(false, data, message), statusCode);
+
+        protected User GetUser() => (User)this.HttpContext.Items[nameof(Domain.User)];
     }
 }

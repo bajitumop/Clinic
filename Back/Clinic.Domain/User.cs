@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class User : Entity
+    public class User
     {
         [Key]
         public string Username { get; set; }
@@ -21,6 +21,8 @@
         [Required]
         public long Phone { get; set; }
         
-        public UserPermission Permission { get; set; }
+        public UserPermission UserPermission { get; set; }
+
+        public bool IsAdmin => (UserPermission & UserPermission.All) == UserPermission.All;
     }
 }

@@ -3,12 +3,20 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using Clinic.Domain;
+    using Domain;
 
-    public interface IServicesRepository : IRepository<Service>
+    public interface IServicesRepository
     {
-        Task<IEnumerable<Service>> GetBySpecialtyAsync(long specialtyId);
+        Task<IList<Service>> GetBySpecialtyAsync(string specialty);
 
         Task<Service> GetAsync(long id);
+
+        Task<IList<Service>> All();
+
+        Task CreateAsync(Service service);
+
+        Task UpdateAsync(Service service);
+
+        Task DeleteAsync(long id);
     }
 }

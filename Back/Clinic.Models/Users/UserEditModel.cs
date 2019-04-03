@@ -1,6 +1,6 @@
 ﻿namespace Clinic.Models.Users
 {
-    using Clinic.Models.Authorization;
+    using Authorization;
 
     public class UserEditModel : RegisterModel
     {

@@ -4,10 +4,8 @@
     {
         public long Id { get; set; }
 
-        public long SpecialtyId { get; set; }
-
-        public string SpecialtyName { get; set; }
-
+        public string Specialty { get; set; }
+        
         public string Description { get; set; }
 
         public float Price { get; set; }

@@ -2,34 +2,63 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
     using System.Threading.Tasks;
-
-    using Clinic.DataAccess.Repositories;
-    using Clinic.Domain;
-
-    using Microsoft.EntityFrameworkCore;
-
-    public class ServicesRepository : DataRepository<Service>, IServicesRepository
+    using Dapper;
+    using Repositories;
+    using Domain;
+    
+    public class ServicesRepository : IServicesRepository
     {
-        public ServicesRepository(DataContext dataContext)
-            : base(dataContext)
+        private readonly IDbConnection connection;
+
+        public ServicesRepository(IDbConnection connection)
         {
+            this.connection = connection;
         }
 
-        public async Task<IEnumerable<Service>> GetBySpecialtyAsync(long specialtyId)
+        public async Task<IList<Service>> GetBySpecialtyAsync(string specialty)
         {
-            return await this.Entities.Where(d => d.Specialty.Id == specialtyId).Include(s => s.Specialty).ToArrayAsync();
+            return (await this.connection.QueryAsync<Service>(@"select * from services where ""Specialty"" = @specialty", new { specialty })).ToList();
         }
 
         public async Task<Service> GetAsync(long id)
         {
-            return await this.Entities.Include(s => s.Specialty).FirstOrDefaultAsync(s => s.Id == id);
+            return await this.connection.QueryFirstOrDefaultAsync<Service>(@"select * from services where ""Id"" = @id", new {id});
         }
 
-        public override async Task<List<Service>> All()
+        public async Task<IList<Service>> All()
         {
-            return await this.Entities.Include(s => s.Specialty).ToListAsync();
+            return (await this.connection.QueryAsync<Service>(@"select * from services")).ToList();
+        }
+
+        public async Task CreateAsync(Service service)
+        {
+            var id = await this.connection.ExecuteAsync(@"
+                insert into services (""Price"", ""AdditionalInfo"", ""Description"", ""Specialty"", ""DoctorPermission"")
+                    values (@Price, @AdditionalInfo, @Description, @Specialty, @DoctorPermission)
+                    returning ""Id""",
+                service);
+            service.Id = id;
+        }
+
+        public async Task UpdateAsync(Service service)
+        {
+            await this.connection.ExecuteAsync(@"
+                update services set 
+                    ""Price"" = @Price, 
+                    ""AdditionalInfo"" = @AdditionalInfo, 
+                    ""Description"" = @Description, 
+                    ""Specialty"" = @Specialty, 
+                    ""DoctorPermission"" = @DoctorPermission
+                    where ""Id"" = @Id",
+                service);
+        }
+
+        public async Task DeleteAsync(long id)
+        {
+            await this.connection.ExecuteAsync(@"delete from services where ""Id"" = @id", new {id});
         }
     }
 }

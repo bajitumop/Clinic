@@ -9,9 +9,7 @@
     {
         public ServiceMapper()
         {
-            this.CreateMap<Service, ServiceModel>()
-                .ForMember(model => model.SpecialtyId, options => options.MapFrom(s => s.Specialty.Id))
-                .ForMember(model => model.SpecialtyName, options => options.MapFrom(s => s.Specialty.Name));
+            this.CreateMap<Service, ServiceModel>();
         }
     }
 }

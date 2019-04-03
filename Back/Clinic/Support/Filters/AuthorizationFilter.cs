@@ -32,7 +32,7 @@
                 return;
             }
 
-            if ((requiredUserPermission & user.Permission) != requiredUserPermission)
+            if ((requiredUserPermission & user.UserPermission) != requiredUserPermission)
             {
                 var operationResult = new OperationResult(false, "Не хватает прав для выполнения данной операции");
                 context.Result = new CustomJsonResult(operationResult, HttpStatusCode.Forbidden);

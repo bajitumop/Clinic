@@ -5,10 +5,10 @@
 
     using AutoMapper;
 
-    using Clinic.DataAccess.Repositories;
-    using Clinic.Domain;
-    using Clinic.Models.Authorization;
-    using Clinic.Services;
+    using DataAccess.Repositories;
+    using Domain;
+    using Models.Authorization;
+    using Services;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -37,10 +37,9 @@
             }
 
             var user = this.mapper.Map<User>(registerModel);
-            user.Permission = UserPermission.CanVisitDoctor;
+            user.UserPermission = UserPermission.CanVisitDoctor;
 
-            this.usersRepository.Create(user);
-            await this.usersRepository.SaveChangesAsync();
+            await this.usersRepository.CreateAsync(user);
 
             return this.Success(this.GenerateAccessToken(user.Username));
         }

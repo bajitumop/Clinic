@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class Image : Entity
+    public class Image
     {
         [Key]
         public long Id { get; set; }

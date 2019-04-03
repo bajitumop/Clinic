@@ -10,8 +10,8 @@
 
         public string ThirdName { get; set; }
 
-        public long? ImageId { get; set; }
+        public string ImageUrl { get; set; }
 
-        public SpecialtyModel[] Specialties { get; set; }
+        public string[] Specialties { get; set; }
     }
 }
