@@ -3,36 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-    </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
-
+    <item
+        android:id="@+id/nav_visits"
+        android:icon="@drawable/ic_visits_48dp"
+        android:title="@string/nav_visits" />
+    <item
+        android:id="@+id/nav_history_visits"
+        android:icon="@drawable/ic_visits_history_48dp"
+        android:title="@string/nav_history_visits" />
+    <item
+        android:id="@+id/nav_doctors"
+        android:icon="@drawable/ic_doctor_48dp"
+        android:title="@string/nav_doctors" />
+    <item
+        android:id="@+id/nav_services"
+        android:icon="@drawable/ic_services_48dp"
+        android:title="@string/nav_services" />
+    <item
+        android:id="@+id/nav_contacts"
+        android:icon="@drawable/ic_contacts_48dp"
+        android:title="@string/nav_contacts" />
 </menu>

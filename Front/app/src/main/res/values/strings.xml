@@ -6,4 +6,13 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="internet_connection_error_alt">Нет интернет соединения</string>
+    <string name="internet_connection_error">Нет соединения с сервером. Проверьте настройки интернет соединение</string>
+    <string name="no_server_connection">Отсутствует соединение с сервером</string>
+    <string name="check_internet_settings">Проверьте настройки интернет соединения</string>
+    <string name="nav_visits">Ближайшие записи</string>
+    <string name="nav_history_visits">История записей</string>
+    <string name="nav_doctors">Врачи</string>
+    <string name="nav_services">Услуги</string>
+    <string name="nav_contacts">Контакты</string>
 </resources>
