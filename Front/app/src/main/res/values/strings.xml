@@ -15,4 +15,7 @@
     <string name="nav_doctors">Врачи</string>
     <string name="nav_services">Услуги</string>
     <string name="nav_contacts">Контакты</string>
+    <string name="no_authorized_message">Вы не авторизованы в системе</string>
+    <string name="authorize_message">Войдите или зарегистрируйтесь</string>
+    <string name="to_continue">чтобы продолжить</string>
 </resources>

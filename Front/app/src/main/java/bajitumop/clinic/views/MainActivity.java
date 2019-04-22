@@ -1,71 +1,81 @@
 package bajitumop.clinic.views;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import bajitumop.clinic.R;
-import bajitumop.clinic.models.ApiResult;
-import bajitumop.clinic.models.DoctorShortModel;
-import bajitumop.clinic.services.network.IClinicApi;
-import bajitumop.clinic.services.network.NetworkService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class MainActivity extends BaseFlipperActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private final int CONTENT_VIEW = 0;
+    private final int PROGRESS_VIEW = 1;
+    private final int CONNECTION_ERROR_VIEW = 2;
+    private final int NO_AUTHORIZED_ERROR_VIEW = 3;
+
+    ViewFlipper viewFlipper;
     private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        viewFlipper = findViewById(R.id.viewFlipper);
+        InitializeGoToLoginListener();
         InitializeDrawerLayout();
         InitializeFab();
     }
 
+    private void InitializeGoToLoginListener() {
+        TextView goToLoginTV = findViewById(R.id.goToLoginTV);
+        goToLoginTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToAuthorization();
+            }
+        });
+    }
+
     private void InitializeFab() {
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IClinicApi clinicApi = new NetworkService().getClinicApi();
-                // Start
-                clinicApi.getDoctors()
-                        .enqueue(new Callback<ApiResult<DoctorShortModel[]>>() {
-                            @Override
-                            public void onResponse(@NonNull Call<ApiResult<DoctorShortModel[]>> call, @NonNull Response<ApiResult<DoctorShortModel[]>> response) {
-                                ApiResult<DoctorShortModel[]> body = response.body();
-                                // more logic
-                            }
-
-                            @Override
-                            public void onFailure(@NonNull Call<ApiResult<DoctorShortModel[]>> call, @NonNull Throwable t) {
-                                // more logic
-                            }
-                        });
-                // End
+                goToCreatingRecord();
             }
         });
 
-        //where ApiResult class: { boolean success, T data, string message, int statusCode }
-        /*
+        /*IClinicApi clinicApi = new NetworkService().getClinicApi();
+        clinicApi.getDoctors()
+                .enqueue(new Callback<ApiResult<DoctorShortModel[]>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ApiResult<DoctorShortModel[]>> call, @NonNull Response<ApiResult<DoctorShortModel[]>> response) {
+                        ApiResult<DoctorShortModel[]> body = response.body();
+                        // more logic
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ApiResult<DoctorShortModel[]>> call, @NonNull Throwable t) {
+                        // more logic
+                    }
+                });
+
+
             clinicApi.getDoctors(response => {
                 if (response.success) {
                     // update view from response.data
                 } else {
                     // check response.statusCode and show snackbar with message or view error page
                 }
-            })
-        */
+            })*/
     }
 
     private void InitializeDrawerLayout() {
@@ -107,5 +117,37 @@ public class MainActivity extends BaseFlipperActivity
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void goToAuthorization() {
+
+    }
+
+    private void goToCreatingRecord() {
+        
+    }
+
+    private void setFragment() {
+
+    }
+
+    private void setContentPage() {
+        setView(CONTENT_VIEW);
+    }
+
+    private void setProgressPage() {
+        setView(PROGRESS_VIEW);
+    }
+
+    private void setErrorView() {
+        setView(CONNECTION_ERROR_VIEW);
+    }
+
+    private void setNoAuthorizedView() {
+        setView(NO_AUTHORIZED_ERROR_VIEW);
+    }
+
+    private void setView(int child) {
+        this.viewFlipper.setDisplayedChild(child);
     }
 }
