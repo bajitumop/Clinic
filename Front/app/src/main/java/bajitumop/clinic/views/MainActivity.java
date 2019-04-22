@@ -138,12 +138,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void goToSettings() {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        User user = new User();
-
-        String serialized = new Gson().toJson(user);
-        intent.putExtra("user", serialized);
-        startActivity(intent);
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 
     private void setFragment() {
