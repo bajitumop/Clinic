@@ -1,17 +1,22 @@
 package bajitumop.clinic.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.google.gson.Gson;
+
 import bajitumop.clinic.R;
+import bajitumop.clinic.models.User;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -21,6 +26,7 @@ public class MainActivity extends BaseActivity
     private final int CONNECTION_ERROR_VIEW = 2;
     private final int NO_AUTHORIZED_ERROR_VIEW = 3;
 
+    Toolbar toolbar;
     ViewFlipper viewFlipper;
     private DrawerLayout drawerLayout;
 
@@ -29,6 +35,10 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         viewFlipper = findViewById(R.id.viewFlipper);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         InitializeGoToLoginListener();
         InitializeDrawerLayout();
         InitializeFab();
@@ -49,7 +59,7 @@ public class MainActivity extends BaseActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToCreatingRecord();
+                goToSettings();
             }
         });
 
@@ -124,7 +134,16 @@ public class MainActivity extends BaseActivity
     }
 
     private void goToCreatingRecord() {
-        
+
+    }
+
+    private void goToSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        User user = new User();
+
+        String serialized = new Gson().toJson(user);
+        intent.putExtra("user", serialized);
+        startActivity(intent);
     }
 
     private void setFragment() {

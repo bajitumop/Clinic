@@ -18,4 +18,11 @@
     <string name="no_authorized_message">Вы не авторизованы в системе</string>
     <string name="authorize_message">Войдите или зарегистрируйтесь</string>
     <string name="to_continue">чтобы продолжить</string>
+    <string name="second_name">Фамилия</string>
+    <string name="first_name">Имя</string>
+    <string name="third_name">Отчество</string>
+    <string name="username">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="save">Сохранить</string>
+    <string name="edit_user_data">Настройки аккаунта</string>
 </resources>

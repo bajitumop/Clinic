@@ -6,7 +6,6 @@ public class User {
     private String thirdName;
     private String passwordHash;
     private String username;
-    private long phone;
     private String accessToken;
 
     public String getFirstName() {
@@ -47,14 +46,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public long getPhone() {
-        return phone;
-    }
-
-    public void setPhone(long phone) {
-        this.phone = phone;
     }
 
     public String getAccessToken() {
