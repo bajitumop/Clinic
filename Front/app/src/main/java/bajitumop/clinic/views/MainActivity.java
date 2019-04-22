@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,10 +14,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import com.google.gson.Gson;
-
 import bajitumop.clinic.R;
-import bajitumop.clinic.models.User;
+import bajitumop.clinic.views.MainFragments.ContactsFragment;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -120,6 +119,8 @@ public class MainActivity extends BaseActivity
             case R.id.nav_services:
                 break;
             case R.id.nav_contacts:
+                Fragment fragment = new ContactsFragment();
+                setFragment(fragment);
                 break;
             default:
                 break;
@@ -141,8 +142,8 @@ public class MainActivity extends BaseActivity
         startActivity(new Intent(this, SettingsActivity.class));
     }
 
-    private void setFragment() {
-
+    private void setFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
     }
 
     private void setContentPage() {

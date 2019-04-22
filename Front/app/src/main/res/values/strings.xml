@@ -27,4 +27,5 @@
     <string name="edit_user_data">Настройки аккаунта</string>
     <string name="something_went_wrong">Ошибка выполнения запроса</string>
     <string name="successfully_user_update">Данные пользователя успешно сохранены</string>
+    <string name="go_to_clinic">Приезжайте в нашу клинику!</string>
 </resources>

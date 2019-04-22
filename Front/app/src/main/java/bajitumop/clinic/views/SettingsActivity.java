@@ -10,7 +10,6 @@ import android.widget.TextView;
 import bajitumop.clinic.R;
 import bajitumop.clinic.models.ApiResult;
 import bajitumop.clinic.models.User;
-import bajitumop.clinic.services.network.UserStorage;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
