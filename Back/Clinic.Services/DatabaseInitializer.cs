@@ -126,7 +126,6 @@
                     SecondName = "Администратор",
                     ThirdName = "Администратор",
                     UserPermission = UserPermission.All,
-                    Phone = 89999999999,
                     PasswordHash = this.cryptoService.Encrypt("admin")
                 };
                 

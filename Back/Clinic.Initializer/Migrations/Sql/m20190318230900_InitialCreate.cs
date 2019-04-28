@@ -9,7 +9,6 @@ create table users (
     ""FirstName"" varchar not null,
     ""SecondName"" varchar not null,
     ""ThirdName"" varchar,
-    ""Phone"" bigint not null,
     ""UserPermission"" int not null
 );
 

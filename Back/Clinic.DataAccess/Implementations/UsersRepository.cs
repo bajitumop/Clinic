@@ -28,8 +28,8 @@
         public async Task CreateAsync(User user)
         {
             await this.connection.ExecuteAsync(@"
-                insert into users (""Username"", ""PasswordHash"", ""FirstName"", ""SecondName"", ""ThirdName"", ""Phone"", ""UserPermission"")
-                    values (@Username, @PasswordHash, @FirstName, @SecondName, @ThirdName, @Phone, @UserPermission)",
+                insert into users (""Username"", ""PasswordHash"", ""FirstName"", ""SecondName"", ""ThirdName"", ""UserPermission"")
+                    values (@Username, @PasswordHash, @FirstName, @SecondName, @ThirdName, @UserPermission)",
                 user);
         }
 
@@ -41,7 +41,6 @@
                     ""FirstName"" = @FirstName, 
                     ""SecondName"" = @SecondName, 
                     ""ThirdName"" = @ThirdName, 
-                    ""Phone"" = @Phone,
                     ""UserPermission"" = @UserPermission
                     where ""Username"" = @Username",
                 user);

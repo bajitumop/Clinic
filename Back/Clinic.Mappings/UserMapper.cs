@@ -12,6 +12,7 @@
         {
             this.CreateMap<UserEditModel, User>();
             this.CreateMap<RegisterModel, User>();
+            this.CreateMap<User, LoginResponse>();
         }
     }
 }

@@ -17,9 +17,6 @@
         public string SecondName { get; set; }
 
         public string ThirdName { get; set; }
-
-        [Required]
-        public long Phone { get; set; }
         
         public UserPermission UserPermission { get; set; }
 

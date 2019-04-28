@@ -29,7 +29,7 @@
         }
 
         [HttpPost, Route("register")]
-        public async Task<IActionResult> Register(RegisterModel registerModel)
+        public async Task<IActionResult> Register([FromBody] RegisterModel registerModel)
         {
             if (await this.usersRepository.GetAsync(registerModel.Username) != null)
             {
@@ -45,7 +45,7 @@
         }
 
         [HttpPost, Route("login")]
-        public async Task<IActionResult> Login(LoginModel loginModel)
+        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
             var user = await this.usersRepository.GetAsync(loginModel.Username);
             if (user == null)
@@ -58,7 +58,9 @@
                 return this.Error("Указано неверное имя пользователя или пароль");
             }
 
-            return this.Success(this.GenerateAccessToken(user.Username));
+            var response = this.mapper.Map<LoginResponse>(user);
+            response.AccessToken = this.GenerateAccessToken(user.Username);
+            return this.Success(response);
         }
         
         private string GenerateAccessToken(string username)
