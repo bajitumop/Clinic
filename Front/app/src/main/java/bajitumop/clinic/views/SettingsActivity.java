@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import bajitumop.clinic.R;
 import bajitumop.clinic.models.ApiResult;
+import bajitumop.clinic.models.Empty;
 import bajitumop.clinic.models.User;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -69,7 +70,7 @@ public class SettingsActivity extends BaseActivity {
         user.setPasswordHash(firstNameEditText.getText().toString());
         user.setAccessToken(getUser().getAccessToken());
 
-        clinicApi.updateUser(user)
+        /*clinicApi.updateUser(user)
                 .enqueue(new Callback<ApiResult>() {
                     @Override
                     public void onResponse(@NonNull Call<ApiResult> call, @NonNull Response<ApiResult> response) {
@@ -81,10 +82,10 @@ public class SettingsActivity extends BaseActivity {
                     public void onFailure(@NonNull Call<ApiResult> call, @NonNull Throwable t) {
                         submitButton.setEnabled(true);
                     }
-                });
+                });*/
     }
 
-    private void onUserUpdateResponse(ApiResult result, User user){
+    private void onUserUpdateResponse(ApiResult<Empty> result, User user){
         if (result == null) {
             onUserUpdateFailure();
         } else if (result.isSuccess()) {

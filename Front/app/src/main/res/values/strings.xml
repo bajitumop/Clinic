@@ -28,4 +28,8 @@
     <string name="something_went_wrong">Ошибка выполнения запроса</string>
     <string name="successfully_user_update">Данные пользователя успешно сохранены</string>
     <string name="go_to_clinic">Приезжайте в нашу клинику!</string>
+    <string name="enter">Вход</string>
+    <string name="registration">Регистрация</string>
+    <string name="login">Войти</string>
+    <string name="registrate">Зарегистрироваться</string>
 </resources>

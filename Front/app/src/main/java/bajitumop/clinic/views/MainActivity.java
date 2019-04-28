@@ -58,33 +58,14 @@ public class MainActivity extends BaseActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToSettings();
+                goToLogin();
             }
         });
+    }
 
-        /*IClinicApi clinicApi = new NetworkService().getClinicApi();
-        clinicApi.getDoctors()
-                .enqueue(new Callback<ApiResult<DoctorShortModel[]>>() {
-                    @Override
-                    public void onResponse(@NonNull Call<ApiResult<DoctorShortModel[]>> call, @NonNull Response<ApiResult<DoctorShortModel[]>> response) {
-                        ApiResult<DoctorShortModel[]> body = response.body();
-                        // more logic
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<ApiResult<DoctorShortModel[]>> call, @NonNull Throwable t) {
-                        // more logic
-                    }
-                });
-
-
-            clinicApi.getDoctors(response => {
-                if (response.success) {
-                    // update view from response.data
-                } else {
-                    // check response.statusCode and show snackbar with message or view error page
-                }
-            })*/
+    private void goToLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     private void InitializeDrawerLayout() {

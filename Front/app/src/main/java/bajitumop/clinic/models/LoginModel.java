@@ -4,6 +4,9 @@ public class LoginModel {
     private String username;
     private String passwordHash;
 
+    public LoginModel(){
+    }
+
     public LoginModel(String username, String passwordHash) {
         this.username = username;
         this.passwordHash = passwordHash;
