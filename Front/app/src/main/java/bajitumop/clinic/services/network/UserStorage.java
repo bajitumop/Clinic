@@ -24,12 +24,12 @@ public class UserStorage {
     public void updateUser(User user) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if (user == null) {
-            editor.putString("username", "");
-            editor.putString("passwordHash", "");
-            editor.putString("firstName", "");
-            editor.putString("secondName", "");
-            editor.putString("thirdName", "");
-            editor.putString("accessToken", "");
+            editor.putString("username", null);
+            editor.putString("passwordHash", null);
+            editor.putString("firstName", null);
+            editor.putString("secondName", null);
+            editor.putString("thirdName", null);
+            editor.putString("accessToken", null);
         } else {
             editor.putString("username", user.getUsername());
             editor.putString("passwordHash", user.getPasswordHash());
@@ -38,6 +38,8 @@ public class UserStorage {
             editor.putString("thirdName", user.getThirdName());
             editor.putString("accessToken", user.getAccessToken());
         }
+
+        editor.apply();
     }
 
     public User getUser(){
@@ -47,11 +49,11 @@ public class UserStorage {
         }
 
         User user = new User();
-        user.setUsername(sharedPreferences.getString("username", ""));
-        user.setPasswordHash(sharedPreferences.getString("passwordHash", ""));
-        user.setFirstName(sharedPreferences.getString("firstName", ""));
-        user.setSecondName(sharedPreferences.getString("secondName", ""));
-        user.setThirdName(sharedPreferences.getString("thirdName", ""));
+        user.setUsername(sharedPreferences.getString("username", null));
+        user.setPasswordHash(sharedPreferences.getString("passwordHash", null));
+        user.setFirstName(sharedPreferences.getString("firstName", null));
+        user.setSecondName(sharedPreferences.getString("secondName", null));
+        user.setThirdName(sharedPreferences.getString("thirdName", null));
         user.setAccessToken(accessToken);
         return user;
     }

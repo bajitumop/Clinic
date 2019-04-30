@@ -1,6 +1,5 @@
 package bajitumop.clinic.views;
 
-import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -66,6 +65,15 @@ public class LoginActivity extends BaseActivity {
         toggleView(isLogin);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getUser() != null) {
+            startMainActivity();
+            return;
+        }
+    }
+
     private void toggleView(boolean isLogin){
         loginTitle.setText(getString(isLogin ? R.string.enter : R.string.registration));
         loginSecondPage.setText(getString(isLogin ? R.string.registration : R.string.enter));
@@ -95,7 +103,8 @@ public class LoginActivity extends BaseActivity {
                         user.setFirstName(response.getFirstName());
                         user.setSecondName(response.getSecondName());
                         user.setThirdName(response.getThirdName());
-                        finishWithResult(user);
+                        updateUser(user);
+                        startMainActivity();
                     } else {
                         snackbar(submitButton, result.getMessage());
                     }
@@ -122,7 +131,8 @@ public class LoginActivity extends BaseActivity {
                         user.setFirstName(firstName);
                         user.setSecondName(secondName);
                         user.setThirdName(thirdName);
-                        finishWithResult(user);
+                        updateUser(user);
+                        startMainActivity();
                     } else {
                         snackbar(submitButton, result.getMessage());
                     }
@@ -133,10 +143,8 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    private void finishWithResult(User user) {
-        updateUser(user);
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
-        finish();
+    private void startMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

@@ -20,7 +20,6 @@
 
         <include layout="@layout/layout_progress" android:id="@+id/progressView" />
         <include layout="@layout/layout_connection_error" android:id="@+id/connectionErrorView" />
-        <include layout="@layout/layout_no_authorized_view" android:id="@+id/noAuthorizedErrorView" />
 
     </ViewFlipper>
 
