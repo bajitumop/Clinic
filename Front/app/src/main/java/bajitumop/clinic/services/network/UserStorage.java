@@ -29,12 +29,14 @@ public class UserStorage {
             editor.putString("firstName", "");
             editor.putString("secondName", "");
             editor.putString("thirdName", "");
+            editor.putString("accessToken", "");
         } else {
             editor.putString("username", user.getUsername());
             editor.putString("passwordHash", user.getPasswordHash());
             editor.putString("firstName", user.getFirstName());
             editor.putString("secondName", user.getSecondName());
             editor.putString("thirdName", user.getThirdName());
+            editor.putString("accessToken", user.getAccessToken());
         }
     }
 
