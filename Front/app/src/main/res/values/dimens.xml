@@ -9,4 +9,7 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="header_text_size">22sp</dimen>
     <dimen name="link_text_size">18sp</dimen>
+    <dimen name="activity_half_horizontal_margin">8dp</dimen>
+    <dimen name="activity_half_vertical_margin">8dp</dimen>
+    <dimen name="listMargin">4dp</dimen>
 </resources>

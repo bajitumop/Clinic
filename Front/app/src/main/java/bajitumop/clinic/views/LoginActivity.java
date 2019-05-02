@@ -14,6 +14,7 @@ import bajitumop.clinic.models.LoginModel;
 import bajitumop.clinic.models.LoginResponse;
 import bajitumop.clinic.models.RegistrationModel;
 import bajitumop.clinic.models.User;
+import bajitumop.clinic.services.network.IOnResponseCallback;
 import bajitumop.clinic.services.security.IHashAlgorithm;
 import bajitumop.clinic.services.security.Sha256HashAlgorithm;
 
@@ -91,9 +92,9 @@ public class LoginActivity extends BaseActivity {
 
         if (isLogin) {
             LoginModel loginModel = new LoginModel(username, hash);
-            doResponse(clinicApi.login(loginModel), new ICompletable<LoginResponse>() {
+            sendRequest(clinicApi.login(loginModel), new IOnResponseCallback<LoginResponse>() {
                 @Override
-                public void onComplete(ApiResult<LoginResponse> result) {
+                public void onResponse(ApiResult<LoginResponse> result) {
                     if (result.isSuccess()) {
                         LoginResponse response = result.getData();
                         User user = new User();
@@ -119,9 +120,9 @@ public class LoginActivity extends BaseActivity {
             final String thirdName = thirdNameEditText.getText().toString();
             RegistrationModel registrationModel = new RegistrationModel(username, hash, firstName, secondName, thirdName);
 
-            doResponse(clinicApi.register(registrationModel), new ICompletable<String>() {
+            sendRequest(clinicApi.register(registrationModel), new IOnResponseCallback<String>() {
                 @Override
-                public void onComplete(ApiResult<String> result) {
+                public void onResponse(ApiResult<String> result) {
                     if (result.isSuccess()) {
                         String accessToken = result.getData();
                         User user = new User();

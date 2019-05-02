@@ -9,6 +9,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkService {
+    public static final String HOST = "http://192.168.1.38:8888";
     private static IClinicApi clinicApi;
 
     public static IClinicApi Create(){
@@ -19,7 +20,7 @@ public class NetworkService {
                     .build();
 
             clinicApi = new Retrofit.Builder()
-                    .baseUrl("http://192.168.1.38:8888/api/")
+                    .baseUrl(HOST+"/api/")
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))

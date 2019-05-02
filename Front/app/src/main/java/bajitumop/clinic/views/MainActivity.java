@@ -16,11 +16,13 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import bajitumop.clinic.R;
+import bajitumop.clinic.models.DoctorShortModel;
 import bajitumop.clinic.models.User;
 import bajitumop.clinic.views.MainFragments.ContactsFragment;
+import bajitumop.clinic.views.MainFragments.DoctorsFragment;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DoctorsFragment.IDoctorsListInteractionListener {
 
     private final int CONTENT_VIEW = 0;
     private final int PROGRESS_VIEW = 1;
@@ -99,6 +101,7 @@ public class MainActivity extends BaseActivity
             case R.id.nav_history_visits:
                 break;
             case R.id.nav_doctors:
+                setFragment(new DoctorsFragment());
                 break;
             case R.id.nav_services:
                 break;
@@ -124,5 +127,11 @@ public class MainActivity extends BaseActivity
 
     private void setView(int child) {
         this.viewFlipper.setDisplayedChild(child);
+    }
+
+    @Override
+    public void onDoctorClick(DoctorShortModel doctor) {
+
+        int x = 7;
     }
 }
