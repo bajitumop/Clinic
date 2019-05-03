@@ -14,13 +14,12 @@ create table users (
 
 create table doctors(
     ""Id"" serial primary key,
+    ""Specialty"" varchar not null,
     ""FirstName"" varchar not null,
     ""SecondName"" varchar not null,
     ""ThirdName"" varchar not null,
     ""Info"" text,
-    ""ImageId"" varchar,
-    ""Positions"" text[],
-    ""DoctorPermission"" bigint not null
+    ""ImageId"" varchar
 );
 
 create table images(
@@ -30,9 +29,7 @@ create table images(
 );
 
 create table schedules(
-    ""DoctorId"" bigint not null,
-    ""Specialty"" varchar not null,
-    ""VisitDuration"" interval not null,
+    ""DoctorId"" primary key,
     ""MondayStart"" interval,
     ""MondayEnd"" interval,
     ""TuesdayStart"" interval,
@@ -44,15 +41,13 @@ create table schedules(
     ""FridayStart"" interval,
     ""FridayEnd"" interval,
     ""SaturdayStart"" interval,
-    ""SaturdayEnd"" interval,
-    primary key (""DoctorId"", ""Specialty"")
+    ""SaturdayEnd"" interval
 );
 
 create table services(
     ""Id"" serial primary key,
     ""Specialty"" varchar not null,
     ""Description"" varchar not null,
-    ""DoctorPermission"" bigint not null,
     ""Price"" real not null,
     ""AdditionalInfo"" text
 );

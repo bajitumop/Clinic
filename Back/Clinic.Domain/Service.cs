@@ -13,8 +13,6 @@
         [Required]
         public string Description { get; set; }
 
-        public DoctorPermission DoctorPermission { get; set; }
-
         [Required]
         public float Price { get; set; }
 

@@ -5,8 +5,6 @@
 
     public interface IUsersRepository
     {
-        Task<bool> IsLastAdmin(string username);
-
         Task<User> GetAsync(string username);
 
         Task CreateAsync(User user);

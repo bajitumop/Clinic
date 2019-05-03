@@ -1,6 +1,5 @@
 ﻿namespace Clinic.Controllers
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
@@ -31,18 +30,7 @@
         public async Task<IActionResult> GetAll()
         {
             var doctors = await this.doctorsRepository.All();
-            var specialtiesDictionary = (await this.schedulesRepository.All())
-                .GroupBy(schedule => schedule.DoctorId)
-                .ToDictionary(g => g.Key, g => g.Select(s => s.Specialty).ToArray());
-
-            var result = doctors.Select(doctor =>
-                {
-                    var doctorModel = this.mapper.Map<DoctorShortModel>(doctor);
-                    doctorModel.Specialties = specialtiesDictionary[doctorModel.Id];
-                    return doctorModel;
-                })
-                .ToArray();
-            return this.Success(result);
+            return this.Success(doctors.Select(d => this.mapper.Map<DoctorModel>(d)));
         }
 
         [HttpGet, Route("{id}")]
@@ -54,27 +42,14 @@
                 return this.Error("Доктор с указанным id не найден в базе", HttpStatusCode.NotFound);
             }
 
-            var specialties = (await this.schedulesRepository.GetByDoctorAsync(id)).Select(s => s.Specialty).ToArray();
-            var doctorModel = this.mapper.Map<DoctorModel>(doctor);
-            doctorModel.Specialties = specialties;
-            return this.Success(doctorModel);
+            return this.Success(this.mapper.Map<DoctorModel>(doctor));
         }
 
         [HttpGet, Route("by-specialty")]
         public async Task<IActionResult> GetBySpecialty(string specialty)
         {
             var doctors = await this.doctorsRepository.GetBySpecialtyAsync(specialty);
-            var result = new List<DoctorShortModel>();
-            foreach (var doctor in doctors)
-            {
-                var model = this.mapper.Map<DoctorShortModel>(doctor);
-                model.Specialties = (await this.schedulesRepository.GetByDoctorAsync(doctor.Id))
-                    .Select(x => x.Specialty)
-                    .Distinct()
-                    .ToArray();
-                result.Add(model);
-            }
-            return this.Success(result);
+            return this.Success(doctors.Select(d => this.mapper.Map<DoctorModel>(d)));
         }
     }
 }

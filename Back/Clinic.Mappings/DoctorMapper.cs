@@ -9,14 +9,7 @@
     {
         public DoctorMapper()
         {
-            this.CreateMap<Doctor, DoctorShortModel>()
-                .ForMember(
-                    model => model.ImageUrl,
-                    options => options.MapFrom(d => d.ImageId.HasValue ? $"/api/images/doctors/{d.ImageId.Value}" : null));
-
-            this.CreateMap<Doctor, DoctorModel>().ForMember(
-                model => model.ImageUrl,
-                options => options.MapFrom(d => d.ImageId.HasValue ? $"/api/images/doctors/{d.ImageId.Value}" : null));
+            this.CreateMap<Doctor, DoctorModel>();
         }
     }
 }

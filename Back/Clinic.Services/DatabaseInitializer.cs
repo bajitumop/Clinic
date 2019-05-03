@@ -80,7 +80,7 @@
                         SecondName = doctorParsingModel.SecondName,
                         ThirdName = doctorParsingModel.ThirdName,
                         Info = doctorParsingModel.Info,
-                        Positions = doctorParsingModel.Positions
+                        Specialty = specialty
                     };
 
                     await this.doctorsRepository.CreateAsync(doctor);
@@ -89,13 +89,10 @@
                     {
                         await this.imagesRepository.UpsertAsync(doctor.Id, doctorParsingModel.Image, doctorParsingModel.ImageFormat);
                     }
-
-                    await this.AddWeekdays(doctor);
-
+                    
                     var schedule = new Schedule
                     {
                         DoctorId = doctor.Id,
-                        Specialty = specialty,
                         MondayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Monday]?[0],
                         MondayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Monday]?[1],
                         TuesdayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Tuesday]?[0],
@@ -107,8 +104,7 @@
                         FridayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Friday]?[0],
                         FridayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Friday]?[1],
                         SaturdayStart = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Saturday]?[0],
-                        SaturdayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Saturday]?[1],
-                        VisitDuration = TimeSpan.FromMinutes(10)
+                        SaturdayEnd = scheduleParsingModel.ScheduleByDayOfWeek[DayOfWeek.Saturday]?[1]
                     };
 
                     await this.schedulesRepository.UpsertAsync(schedule);
@@ -135,12 +131,6 @@
 
                 this.logger.LogInformation("Import data was successfully finished");
             }
-        }
-
-        private async Task AddWeekdays(Doctor doctor)
-        {
-            // ToDo: Implement weekdays initializing 
-            this.logger.LogWarning("Implement weekdays initializing!");
         }
 
         private async Task<ScheduleParsingModel[]> ParseScheduleParsingModels(WebClient webClient, HtmlParser htmlParser)

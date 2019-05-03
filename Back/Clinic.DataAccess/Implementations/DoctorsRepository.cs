@@ -18,19 +18,16 @@
             this.connection = connection;
         }
 
-        public async Task<IList<Doctor>> GetBySpecialtyAsync(string specialty)
+        public async Task<IEnumerable<Doctor>> GetBySpecialtyAsync(string specialty)
         {
             return (await this.connection.QueryAsync<Doctor>(
-                @"select * from doctors as d
-                     join schedules as s on d.""Id"" = s.""DoctorId""
-                     where s.""Specialty"" = @specialty", 
-                new { specialty }))
-                .ToList();
+                @"select * from doctors where s.""Specialty"" = @specialty", 
+                new { specialty }));
         }
 
-        public async Task<IList<Doctor>> All()
+        public async Task<IEnumerable<Doctor>> All()
         {
-            return (await this.connection.QueryAsync<Doctor>(@"select * from doctors")).ToList();
+            return (await this.connection.QueryAsync<Doctor>(@"select * from doctors"));
         }
 
         public async Task<Doctor> GetAsync(long id)
@@ -41,15 +38,9 @@
         public async Task CreateAsync(Doctor doctor)
         {
             doctor.Id = await connection.ExecuteScalarAsync<long>(
-                @"insert into doctors (""FirstName"", ""SecondName"", ""ThirdName"", ""Info"", ""Positions"", ""DoctorPermission"")
-                    values (@FirstName, @SecondName, @ThirdName, @Info, @Positions, @DoctorPermission) returning ""Id""",
+                @"insert into doctors (""Specialty"", ""FirstName"", ""SecondName"", ""ThirdName"", ""Info"")
+                    values (@Specialty, @FirstName, @SecondName, @ThirdName, @Info) returning ""Id""",
                 doctor);
-        }
-
-        public async Task Delete(long id)
-        {
-            await this.connection.ExecuteAsync(@"delete from images where ""Id"" = (select ""ImageId"" from doctors where ""Id"" = @id)", new {id});
-            await this.connection.ExecuteAsync(@"delete from doctors where ""Id"" = @id", new {id});
         }
     }
 }

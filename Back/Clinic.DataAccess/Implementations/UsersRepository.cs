@@ -14,12 +14,7 @@
         {
             this.connection = connection;
         }
-
-        public async Task<bool> IsLastAdmin(string username)
-        {
-            return await this.connection.ExecuteScalarAsync<int>(@"select count(*) from users where ""UserPermission"" = @AdminPermission and ""Username"" != @username", new { username, AdminPermission = UserPermission.All }) == 0;
-        }
-
+        
         public async Task<User> GetAsync(string username)
         {
             return await this.connection.QueryFirstOrDefaultAsync<User>(@"select * from users where ""Username"" = @username limit 1", new {username});

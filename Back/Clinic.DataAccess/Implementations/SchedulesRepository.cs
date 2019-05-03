@@ -17,25 +17,21 @@
             this.connection = connection;
         }
 
-        public async Task<Schedule> GetAsync(long doctorId, string specialty)
+        public async Task<Schedule> GetAsync(long doctorId)
         {
             return await this.connection.QueryFirstOrDefaultAsync<Schedule>(
-                @"select * from schedules where ""DoctorId"" = @doctorId and ""Specialty"" = @specialty limit 1",
-                new { doctorId, specialty });
+                @"select * from schedules where ""DoctorId"" = @doctorId limit 1",
+                new { doctorId });
         }
 
         public async Task UpsertAsync(Schedule schedule)
         {
             await this.connection.ExecuteAsync(@"
-                insert into schedules (""DoctorId"", ""Specialty"", ""MondayStart"", ""MondayEnd"", ""TuesdayStart"", ""TuesdayEnd"",
-                    ""WednesdayStart"", ""WednesdayEnd"", ""ThursdayStart"", ""ThursdayEnd"", ""FridayStart"", ""FridayEnd"",
-                    ""SaturdayStart"", ""SaturdayEnd"", ""VisitDuration"")
-                    values (@DoctorId, @Specialty, @MondayStart, @MondayEnd, @TuesdayStart, @TuesdayEnd,
-                    @WednesdayStart, @WednesdayEnd, @ThursdayStart, @ThursdayEnd, @FridayStart, @FridayEnd,
-                    @SaturdayStart, @SaturdayEnd, @VisitDuration)
+                insert into schedules (""DoctorId"", ""MondayStart"", ""MondayEnd"", ""TuesdayStart"", ""TuesdayEnd"", ""WednesdayStart"",
+                    ""WednesdayEnd"", ""ThursdayStart"", ""ThursdayEnd"", ""FridayStart"", ""FridayEnd"", ""SaturdayStart"", ""SaturdayEnd"")
+                    values (@DoctorId, @MondayStart, @MondayEnd, @TuesdayStart, @TuesdayEnd, @WednesdayStart, @WednesdayEnd, @ThursdayStart, 
+                    @ThursdayEnd, @FridayStart, @FridayEnd, @SaturdayStart, @SaturdayEnd)
                 on conflict on constraint schedules_pkey do update set 
-                    ""DoctorId"" = @doctorId,
-                    ""Specialty"" = @Specialty,
                     ""MondayStart"" = @MondayStart,
                     ""MondayEnd"" = @MondayEnd,
                     ""TuesdayStart"" = @TuesdayStart,
@@ -47,26 +43,18 @@
                     ""FridayStart"" = @FridayStart,
                     ""FridayEnd"" = @FridayEnd,
                     ""SaturdayStart"" = @SaturdayStart,
-                    ""SaturdayEnd"" = @SaturdayEnd,
-                    ""VisitDuration"" = @VisitDuration
+                    ""SaturdayEnd"" = @SaturdayEnd
             ", schedule);
         }
 
-        public async Task Delete(long doctorId, string specialty)
+        public async Task Delete(long doctorId)
         {
-            await this.connection.ExecuteAsync(@"delete from schedules where ""DoctorId"" = @doctorId and ""Specialty"" = @specialty", new {doctorId, specialty});
+            await this.connection.ExecuteAsync(@"delete from schedules where ""DoctorId"" = @doctorId", new { doctorId });
         }
 
-        public async Task<List<Schedule>> All()
+        public async Task<IEnumerable<Schedule>> All()
         {
-            return (await this.connection.QueryAsync<Schedule>(@"select * from schedules")).ToList();
-        }
-
-        public async Task<List<Schedule>> GetByDoctorAsync(long doctorId)
-        {
-            return (await this.connection.QueryAsync<Schedule>(
-                @"select * from schedules where ""DoctorId"" = @doctorId",
-                new {doctorId})).ToList();
+            return await this.connection.QueryAsync<Schedule>(@"select * from schedules");
         }
     }
 }

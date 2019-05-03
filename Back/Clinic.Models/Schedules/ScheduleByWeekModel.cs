@@ -6,10 +6,8 @@
 
     public class ScheduleByWeekModel
     {
-        public DoctorShortModel Doctor { get; set; }
-
-        public string Specialty { get; set; }
-
+        public DoctorModel Doctor { get; set; }
+        
         public TimeSpan? MondayStart { get; set; }
 
         public TimeSpan? MondayEnd { get; set; }

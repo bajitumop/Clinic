@@ -8,7 +8,5 @@
         Task<Image> GetAsync(long id);
 
         Task UpsertAsync(long doctorId, byte[] content, string format);
-
-        Task DeleteAsync(long doctorId, long imageId);
     }
 }

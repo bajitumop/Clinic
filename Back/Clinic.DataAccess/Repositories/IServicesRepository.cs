@@ -7,11 +7,11 @@
 
     public interface IServicesRepository
     {
-        Task<IList<Service>> GetBySpecialtyAsync(string specialty);
+        Task<IEnumerable<Service>> GetBySpecialtyAsync(string specialty);
 
         Task<Service> GetAsync(long id);
 
-        Task<IList<Service>> All();
+        Task<IEnumerable<Service>> All();
 
         Task CreateAsync(Service service);
 

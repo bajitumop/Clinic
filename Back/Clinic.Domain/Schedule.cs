@@ -8,9 +8,6 @@
         [Required]
         public long DoctorId { get; set; }
         
-        [Required]
-        public string Specialty { get; set; }
-        
         public TimeSpan? MondayStart { get; set; }
 
         public TimeSpan? MondayEnd { get; set; }
@@ -34,7 +31,5 @@
         public TimeSpan? SaturdayStart { get; set; }
 
         public TimeSpan? SaturdayEnd { get; set; }
-
-        public TimeSpan VisitDuration { get; set; }
     }
 }

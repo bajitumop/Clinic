@@ -7,14 +7,12 @@
 
     public interface ISchedulesRepository
     {
-        Task<Schedule> GetAsync(long doctorId, string specialty);
+        Task<Schedule> GetAsync(long doctorId);
 
         Task UpsertAsync(Schedule schedule);
 
-        Task Delete(long doctorId, string specialty);
+        Task Delete(long doctorId);
 
-        Task<List<Schedule>> All();
-
-        Task<List<Schedule>> GetByDoctorAsync(long doctorId);
+        Task<IEnumerable<Schedule>> All();
     }
 }
