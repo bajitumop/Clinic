@@ -1,7 +1,7 @@
 package bajitumop.clinic.services.network;
 
 import bajitumop.clinic.models.ApiResult;
-import bajitumop.clinic.models.DoctorShortModel;
+import bajitumop.clinic.models.DoctorModel;
 import bajitumop.clinic.models.Empty;
 import bajitumop.clinic.models.LoginModel;
 import bajitumop.clinic.models.LoginResponse;
@@ -16,7 +16,7 @@ import retrofit2.http.PUT;
 public interface IClinicApi {
 
     @GET("doctors")
-    public Single<ApiResult<DoctorShortModel[]>> getDoctors();
+    public Single<ApiResult<DoctorModel[]>> getDoctors();
 
     @PUT("update")
     public Single<ApiResult<Empty>> updateUser(@Body User user);

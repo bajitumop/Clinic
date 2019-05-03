@@ -15,14 +15,14 @@ import java.util.Arrays;
 
 import bajitumop.clinic.R;
 import bajitumop.clinic.models.ApiResult;
-import bajitumop.clinic.models.DoctorShortModel;
+import bajitumop.clinic.models.DoctorModel;
 import bajitumop.clinic.services.network.IOnResponseCallback;
 import bajitumop.clinic.views.BaseListFragment;
 
 public class DoctorsFragment extends BaseListFragment<DoctorsFragment.IDoctorsListInteractionListener> {
 
     private DoctorsListAdapter adapter;
-    private ArrayList<DoctorShortModel> doctors = new ArrayList<>();
+    private ArrayList<DoctorModel> doctors = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,9 +46,9 @@ public class DoctorsFragment extends BaseListFragment<DoctorsFragment.IDoctorsLi
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setProgress();
-        sendRequest(clinicApi.getDoctors(), new IOnResponseCallback<DoctorShortModel[]>() {
+        sendRequest(clinicApi.getDoctors(), new IOnResponseCallback<DoctorModel[]>() {
             @Override
-            public void onResponse(ApiResult<DoctorShortModel[]> result) {
+            public void onResponse(ApiResult<DoctorModel[]> result) {
                 if (result.isSuccess()) {
                     doctors.clear();
                     doctors.addAll(Arrays.asList(result.getData()));
@@ -62,6 +62,6 @@ public class DoctorsFragment extends BaseListFragment<DoctorsFragment.IDoctorsLi
     }
 
     public interface IDoctorsListInteractionListener {
-        void onDoctorClick(DoctorShortModel doctor);
+        void onDoctorClick(DoctorModel doctor);
     }
 }

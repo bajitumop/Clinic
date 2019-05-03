@@ -2,7 +2,7 @@ package bajitumop.clinic.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DoctorShortModel {
+public class DoctorModel {
     @SerializedName("id")
     private long id;
 
@@ -18,8 +18,11 @@ public class DoctorShortModel {
     @SerializedName("imageUrl")
     private String imageUrl;
 
-    @SerializedName("specialties")
-    private String[] specialties;
+    @SerializedName("info")
+    private String info;
+
+    @SerializedName("specialty")
+    private String specialty;
 
     public long getId() {
         return id;
@@ -61,11 +64,19 @@ public class DoctorShortModel {
         this.imageUrl = imageUrl;
     }
 
-    public String[] getSpecialties() {
-        return specialties;
+    public String getInfo() {
+        return info;
     }
 
-    public void setSpecialties(String[] specialties) {
-        this.specialties = specialties;
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
     }
 }

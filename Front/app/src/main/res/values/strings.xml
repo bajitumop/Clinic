@@ -31,7 +31,7 @@
     <string name="enter">Вход</string>
     <string name="registration">Регистрация</string>
     <string name="login">Войти</string>
-    <string name="registrate">Зарегистрироваться</string>
+    <string name="register">Зарегистрироваться</string>
     <string name="doctorName">ФИО доктора</string>
-    <string name="doctorPositions">Звания доктора</string>
+    <string name="specialty">Специальность</string>
 </resources>

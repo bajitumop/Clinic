@@ -37,10 +37,10 @@
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
-            android:id="@+id/doctorPositions"
+            android:id="@+id/specialty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/doctorPositions"
+            android:text="@string/specialty"
             android:textAppearance="?attr/textAppearanceListItem" />
 
     </LinearLayout>

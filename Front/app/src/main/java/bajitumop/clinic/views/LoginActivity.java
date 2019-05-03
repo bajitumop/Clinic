@@ -80,7 +80,7 @@ public class LoginActivity extends BaseActivity {
         loginSecondPage.setText(getString(isLogin ? R.string.registration : R.string.enter));
 
         additionalBlockLinearLayout.setVisibility(isLogin ? View.GONE : View.VISIBLE);
-        submitButton.setText(getString(isLogin ? R.string.login : R.string.registrate));
+        submitButton.setText(getString(isLogin ? R.string.login : R.string.register));
         this.isLogin = isLogin;
     }
 

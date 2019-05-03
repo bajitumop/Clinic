@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import bajitumop.clinic.R;
-import bajitumop.clinic.models.DoctorShortModel;
+import bajitumop.clinic.models.DoctorModel;
 import bajitumop.clinic.services.network.NetworkService;
 
 import java.util.List;
@@ -21,9 +21,9 @@ public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.
 
     private final Context context;
     private final DoctorsFragment.IDoctorsListInteractionListener listener;
-    private List<DoctorShortModel> doctors;
+    private List<DoctorModel> doctors;
 
-    public DoctorsListAdapter(Context context, List<DoctorShortModel> doctors, DoctorsFragment.IDoctorsListInteractionListener listener) {
+    public DoctorsListAdapter(Context context, List<DoctorModel> doctors, DoctorsFragment.IDoctorsListInteractionListener listener) {
         this.context = context;
         this.doctors = doctors;
         this.listener = listener;
@@ -56,22 +56,22 @@ public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
         private View mView;
         TextView doctorName;
-        TextView doctorPositions;
+        TextView specialty;
         ImageView doctorImage;
-        private DoctorShortModel doctor;
+        private DoctorModel doctor;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             doctorName = view.findViewById(R.id.doctorName);
-            doctorPositions = view.findViewById(R.id.doctorPositions);
+            specialty = view.findViewById(R.id.specialty);
             doctorImage = view.findViewById(R.id.doctorImage);
         }
 
-        public void setDoctor(DoctorShortModel doctor, Context context){
+        public void setDoctor(DoctorModel doctor, Context context){
             this.doctor = doctor;
             doctorName.setText(String.format("%s %s %s", doctor.getSecondName(), doctor.getFirstName(), doctor.getThirdName()));
-            doctorPositions.setText(doctor.getSpecialties()[0]);
+            specialty.setText(doctor.getSpecialty());
             Glide.with(context)
                     .applyDefaultRequestOptions(new RequestOptions()
                     .placeholder(R.drawable.ic_doctor_48dp)
@@ -81,7 +81,7 @@ public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.
                     .into(doctorImage);
         }
 
-        public DoctorShortModel getDoctor() {
+        public DoctorModel getDoctor() {
             return doctor;
         }
 

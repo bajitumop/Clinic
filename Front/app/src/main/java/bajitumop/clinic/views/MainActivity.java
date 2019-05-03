@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import bajitumop.clinic.R;
-import bajitumop.clinic.models.DoctorShortModel;
+import bajitumop.clinic.models.DoctorModel;
 import bajitumop.clinic.models.User;
 import bajitumop.clinic.views.MainFragments.ContactsFragment;
 import bajitumop.clinic.views.MainFragments.DoctorsFragment;
@@ -130,7 +130,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onDoctorClick(DoctorShortModel doctor) {
+    public void onDoctorClick(DoctorModel doctor) {
 
         int x = 7;
     }
