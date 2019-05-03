@@ -1,4 +1,9 @@
-﻿namespace Clinic.Initializer
+﻿using Clinic.Services;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using NLog.Extensions.Logging;
+
+namespace Clinic.Initializer
 {
     using System;
     using System.Collections.Generic;
@@ -30,11 +35,22 @@
                 .AddTransient<IDoctorsRepository, DoctorsRepository>()
                 .AddTransient<ISchedulesRepository, SchedulesRepository>()
                 .AddTransient<IVisitsRepository, VisitsRepository>()
+                .AddTransient<DatabaseInitializer>()
+                .AddTransient<CryptoService>()
+                .AddSingleton(new CryptoService(JsonConvert.DeserializeObject<byte[]>(AppConfiguration["AccessTokenSymmetricKey"])))
+                .AddLogging(loggingBuilder =>
+                {
+                    loggingBuilder.ClearProviders();
+                    loggingBuilder.SetMinimumLevel(LogLevel.Trace);
+                    loggingBuilder.AddNLog(AppConfiguration);
+                })
                 .BuildServiceProvider();
 
             var actions = new Dictionary<string, Action>
             {
-                ["Migrate database"] = MigrateDatabase
+                ["Migrate database"] = MigrateDatabase,
+                ["Drop create database"] = DropCreateDatabase,
+                ["Init db"] = InitDatabase
             }.ToArray();
 
             var choice = args.Any() ? args[0] : null;
@@ -62,6 +78,28 @@
 
             Console.WriteLine("Done");
             Console.ReadLine();
+        }
+
+        private static void InitDatabase()
+        {
+            var initializer = GetService<DatabaseInitializer>();
+            initializer.Init().Wait();
+        }
+
+        private static void DropCreateDatabase()
+        {
+            var connectionString = AppConfiguration.GetConnectionString("DbConnection");
+            var regex = new Regex("Database=(?<db>.*?);");
+            var dbName = regex.Match(connectionString).Groups["db"].Value;
+            var initConnectionString = Regex.Replace(
+                connectionString,
+                "Database=.*?;",
+                string.Empty,
+                RegexOptions.IgnoreCase);
+
+            var initConnection = new NpgsqlConnection(initConnectionString);
+            initConnection.Execute($@"drop database ""{dbName}""");
+            MigrateDatabase();
         }
 
         private static T GetService<T>()

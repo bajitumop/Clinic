@@ -18,8 +18,7 @@ create table doctors(
     ""FirstName"" varchar not null,
     ""SecondName"" varchar not null,
     ""ThirdName"" varchar not null,
-    ""Info"" text,
-    ""ImageId"" varchar
+    ""Info"" text
 );
 
 create table images(
@@ -29,7 +28,7 @@ create table images(
 );
 
 create table schedules(
-    ""DoctorId"" primary key,
+    ""DoctorId"" serial primary key,
     ""MondayStart"" interval,
     ""MondayEnd"" interval,
     ""TuesdayStart"" interval,
@@ -60,9 +59,6 @@ create table visits(
     ""DateTime"" timestamp not null,
     ""VisitStatus"" int not null,
     ""RoomNumber"" varchar not null
-);
-
-create table weekdays(""DoctorId"" bigint not null,  ""Date"" timestamp not null);
-ALTER TABLE weekdays ADD FOREIGN KEY(""DoctorId"") REFERENCES doctors(""Id"") ON DELETE CASCADE;";
+);";
     }
 }
