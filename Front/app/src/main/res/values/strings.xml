@@ -34,4 +34,6 @@
     <string name="register">Зарегистрироваться</string>
     <string name="doctorName">ФИО доктора</string>
     <string name="specialty">Специальность</string>
+    <string name="price">Цена</string>
+    <string name="serviceName">Наименование услуги</string>
 </resources>
