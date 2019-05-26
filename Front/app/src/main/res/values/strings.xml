@@ -34,6 +34,9 @@
     <string name="register">Зарегистрироваться</string>
     <string name="doctorName">ФИО доктора</string>
     <string name="specialty">Специальность</string>
+    <string name="user_data_was_successfully_saved">Данные пользователя были успешно сохранены</string>
+    <string name="user_data_was_not_successfully_saved">Возникла ошибка при выполнении запроса. Повторите действие позже</string>
+    <string name="nav_settings">Настройки</string>
     <string name="price">Цена</string>
     <string name="serviceName">Наименование услуги</string>
 </resources>

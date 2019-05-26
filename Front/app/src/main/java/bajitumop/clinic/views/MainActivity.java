@@ -1,7 +1,7 @@
 package bajitumop.clinic.views;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,23 +13,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import bajitumop.clinic.R;
 import bajitumop.clinic.models.DoctorModel;
+import bajitumop.clinic.models.ServiceModel;
 import bajitumop.clinic.models.User;
 import bajitumop.clinic.views.MainFragments.ContactsFragment;
 import bajitumop.clinic.views.MainFragments.DoctorsFragment;
+import bajitumop.clinic.views.MainFragments.ServicesFragment;
+import bajitumop.clinic.views.MainFragments.SettingsFragment;
 
-public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, DoctorsFragment.IDoctorsListInteractionListener {
-
-    private final int CONTENT_VIEW = 0;
-    private final int PROGRESS_VIEW = 1;
-    private final int CONNECTION_ERROR_VIEW = 2;
+public class MainActivity extends BaseActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
+        DoctorsFragment.IDoctorsListInteractionListener,
+        ServicesFragment.IServicesListInteractionListener,
+        SettingsFragment.IUserStorageProvider {
 
     Toolbar toolbar;
-    ViewFlipper viewFlipper;
+    TextView navigationUserTextView;
     private DrawerLayout drawerLayout;
 
     @Override
@@ -42,7 +43,6 @@ public class MainActivity extends BaseActivity
         }
 
         setContentView(R.layout.activity_main);
-        viewFlipper = findViewById(R.id.viewFlipper);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -71,8 +71,7 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         View header = navigationView.getHeaderView(0);
-        TextView navigationUserTextView = header.findViewById(R.id.nav_header_username);
-        navigationUserTextView.setText(String.format("%s %s", user.getFirstName(), user.getSecondName()));
+        navigationUserTextView = header.findViewById(R.id.nav_header_username);
         ImageView logoutImageView = header.findViewById(R.id.logoutImageView);
         logoutImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +80,7 @@ public class MainActivity extends BaseActivity
                 finish();
             }
         });
+        updateUserInfo(user);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_visits:
                 break;
@@ -104,10 +104,13 @@ public class MainActivity extends BaseActivity
                 setFragment(new DoctorsFragment());
                 break;
             case R.id.nav_services:
+                setFragment(new ServicesFragment());
+                break;
+            case R.id.nav_settings:
+                setFragment(new SettingsFragment());
                 break;
             case R.id.nav_contacts:
-                Fragment fragment = new ContactsFragment();
-                setFragment(fragment);
+                setFragment(new ContactsFragment());
                 break;
             default:
                 break;
@@ -117,21 +120,33 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    private void goToSettings() {
-        startActivity(new Intent(this, SettingsActivity.class));
-    }
-
     private void setFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
     }
 
-    private void setView(int child) {
-        this.viewFlipper.setDisplayedChild(child);
+    @Override
+    public void onDoctorClick(DoctorModel doctor) {
+        int x = 7;
     }
 
     @Override
-    public void onDoctorClick(DoctorModel doctor) {
-
+    public void onServiceClick(ServiceModel service) {
         int x = 7;
     }
+
+    @Override
+    public User readUser() {
+        return getUser();
+    }
+
+    @Override
+    public void writeUser(User user) {
+        updateUser(user);
+        updateUserInfo(user);
+    }
+
+    private void updateUserInfo(User user) {
+        navigationUserTextView.setText(String.format("%s %s", user.getFirstName(), user.getSecondName()));
+    }
+
 }

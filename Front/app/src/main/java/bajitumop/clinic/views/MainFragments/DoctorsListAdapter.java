@@ -70,7 +70,7 @@ public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.
 
         public void setDoctor(DoctorModel doctor, Context context){
             this.doctor = doctor;
-            doctorName.setText(String.format("%s %s %s", doctor.getSecondName(), doctor.getFirstName(), doctor.getThirdName()));
+            doctorName.setText(String.format("%s %s. %s.", doctor.getSecondName(), doctor.getFirstName().charAt(0), doctor.getThirdName().charAt(0)));
             specialty.setText(doctor.getSpecialty());
             Glide.with(context)
                     .applyDefaultRequestOptions(new RequestOptions()
