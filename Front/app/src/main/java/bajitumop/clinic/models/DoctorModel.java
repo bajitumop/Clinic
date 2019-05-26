@@ -2,7 +2,9 @@ package bajitumop.clinic.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DoctorModel {
+import java.io.Serializable;
+
+public class DoctorModel implements Serializable {
     @SerializedName("id")
     private long id;
 

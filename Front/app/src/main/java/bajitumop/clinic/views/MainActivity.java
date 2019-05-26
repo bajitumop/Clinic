@@ -1,5 +1,6 @@
 package bajitumop.clinic.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -126,12 +127,16 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onDoctorClick(DoctorModel doctor) {
-        int x = 7;
+        Intent intent = new Intent(this, DoctorActivity.class);
+        intent.putExtra("doctor", doctor);
+        startActivity(intent);
     }
 
     @Override
     public void onServiceClick(ServiceModel service) {
-        int x = 7;
+        Intent intent = new Intent(this, ServiceActivity.class);
+        intent.putExtra("service", service);
+        startActivity(intent);
     }
 
     @Override

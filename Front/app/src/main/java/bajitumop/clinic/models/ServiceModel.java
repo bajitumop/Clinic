@@ -1,6 +1,8 @@
 package bajitumop.clinic.models;
 
-public class ServiceModel {
+import java.io.Serializable;
+
+public class ServiceModel implements Serializable {
     private long id;
     private String specialty;
     private String description;
