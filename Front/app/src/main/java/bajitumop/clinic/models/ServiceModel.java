@@ -48,4 +48,9 @@ public class ServiceModel implements Serializable {
     public void setAdditionalInfo(String additionalInfo) {
         this.additionalInfo = additionalInfo;
     }
+
+    @Override
+    public String toString() {
+        return description;
+    }
 }

@@ -81,4 +81,9 @@ public class DoctorModel implements Serializable {
     public void setSpecialty(String specialty) {
         this.specialty = specialty;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s. %s.", secondName, firstName.charAt(0), thirdName.charAt(0));
+    }
 }

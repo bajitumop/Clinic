@@ -5,6 +5,7 @@ import android.content.Context;
 public abstract class BaseListFragment<TListener> extends BaseFlipperFragment {
     protected TListener listener;
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
