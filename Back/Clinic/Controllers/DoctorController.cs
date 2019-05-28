@@ -1,4 +1,6 @@
-﻿namespace Clinic.Controllers
+﻿using System.Collections.Generic;
+
+namespace Clinic.Controllers
 {
     using System.Linq;
     using System.Net;
