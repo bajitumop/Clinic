@@ -30,7 +30,7 @@
             }
             catch (Exception exc)
             {
-                this.logger.LogError(exc, exc.Message);
+                this.logger.LogError(exc, $"{exc.Message} {exc.StackTrace}");
                 var operationResult = new OperationResult(false, exc.ToString());
                 var customJsonResult = new CustomJsonResult(operationResult, HttpStatusCode.InternalServerError);
                 await customJsonResult.ExecuteResultAsync(new ActionContext { HttpContext = context });

@@ -35,11 +35,16 @@ namespace Clinic.Controllers
         }
 
         [HttpGet, Route("")]
-        public async Task<VisitStatusInfoModel[]> GetDoctorSchedule(int doctorId)
+        public async Task<IActionResult> GetDoctorSchedule(int doctorId)
         {
             var now = DateTime.UtcNow.Date;
             const int days = 14;
             var schedule = await this.schedulesRepository.GetAsync(doctorId);
+            if (schedule == null)
+            {
+                return Success(new VisitStatusInfoModel[0]);
+            }
+
             var visits = (await this.visitsRepository.All(now, now.AddDays(days))).ToArray();
 
             var records = Enumerable.Range(0, days)
@@ -47,7 +52,7 @@ namespace Clinic.Controllers
                 .ToArray();
 
             PopulateRecords(records);
-            return records;
+            return Success(records);
         }
 
         private void PopulateRecords(VisitStatusInfoModel[] records)
