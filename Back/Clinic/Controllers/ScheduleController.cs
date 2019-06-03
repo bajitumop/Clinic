@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Clinic.Domain;
 using Clinic.Models.Schedules;
+using Clinic.Services;
 
 namespace Clinic.Controllers
 {
@@ -20,87 +21,46 @@ namespace Clinic.Controllers
         private readonly ISchedulesRepository schedulesRepository;
         private readonly IDoctorsRepository doctorsRepository;
         private readonly IMapper mapper;
+        private readonly ScheduleService scheduleService;
+        private readonly IVisitsRepository visitsRepository;
 
-        public ScheduleController(ISchedulesRepository schedulesRepository, IMapper mapper, IDoctorsRepository doctorsRepository)
+        public ScheduleController(ISchedulesRepository schedulesRepository, IMapper mapper, ScheduleService scheduleService, 
+            IDoctorsRepository doctorsRepository, IVisitsRepository visitsRepository)
         {
             this.schedulesRepository = schedulesRepository;
             this.mapper = mapper;
+            this.scheduleService = scheduleService;
             this.doctorsRepository = doctorsRepository;
+            this.visitsRepository = visitsRepository;
         }
 
         [HttpGet, Route("")]
         public async Task<VisitStatusInfoModel[]> GetDoctorSchedule(int doctorId)
         {
-            var schedule = await this.schedulesRepository.GetAsync(doctorId);
             var now = DateTime.UtcNow.Date;
-            var records = Enumerable.Range(0, 14)
-                .SelectMany(i => GetVisitStatuses(schedule, now.AddDays(i), TimeSpan.FromMinutes(10)))
+            const int days = 14;
+            var schedule = await this.schedulesRepository.GetAsync(doctorId);
+            var visits = (await this.visitsRepository.All(now, now.AddDays(days))).ToArray();
+
+            var records = Enumerable.Range(0, days)
+                .SelectMany(i => this.scheduleService.GetDoctorVisitsByDate(schedule, now.AddDays(i), visits))
                 .ToArray();
 
-            await PopulateRecords(records);
+            PopulateRecords(records);
             return records;
         }
 
-        private async Task PopulateRecords(VisitStatusInfoModel[] records)
+        private void PopulateRecords(VisitStatusInfoModel[] records)
         {
             var random = new Random();
             foreach (var statusInfo in records)
             {
                 if (random.Next() % 2 == 0)
                 {
-                    statusInfo.Status = VisitStatus.Closed;
+                    //statusInfo.Status = VisitStatus.Closed;
                 }
             }
-
-            await Task.CompletedTask;
         }
 
-        private IEnumerable<VisitStatusInfoModel> GetVisitStatuses(Schedule schedule, DateTime visitDate, TimeSpan visitDuration)
-        {
-            TimeSpan? startTime = null;
-            TimeSpan? endTime = null;
-
-            switch (visitDate.DayOfWeek)
-            {
-                case DayOfWeek.Monday:
-                    startTime = schedule.MondayStart;
-                    endTime = schedule.MondayEnd;
-                    break;
-                case DayOfWeek.Tuesday:
-                    startTime = schedule.TuesdayStart;
-                    endTime = schedule.TuesdayEnd;
-                    break;
-                case DayOfWeek.Wednesday:
-                    startTime = schedule.WednesdayStart;
-                    endTime = schedule.WednesdayEnd;
-                    break;
-                case DayOfWeek.Thursday:
-                    startTime = schedule.ThursdayStart;
-                    endTime = schedule.ThursdayEnd;
-                    break;
-                case DayOfWeek.Friday:
-                    startTime = schedule.FridayStart;
-                    endTime = schedule.FridayEnd;
-                    break;
-                case DayOfWeek.Saturday:
-                    startTime = schedule.SaturdayStart;
-                    endTime = schedule.SaturdayEnd;
-                    break;
-            }
-
-            if (!startTime.HasValue || !endTime.HasValue)
-            {
-                return Enumerable.Empty<VisitStatusInfoModel>();
-            }
-
-            var visitsCount = (int)((endTime.Value - startTime.Value).Ticks / visitDuration.Ticks);
-            return Enumerable
-                .Range(0, visitsCount)
-                .Select(i => new VisitStatusInfoModel
-                {
-                    DateTime = visitDate.Add(TimeSpan.FromTicks(visitDuration.Ticks * i)),
-                    Status = VisitStatus.Opened
-                });
-        }
     }
 }

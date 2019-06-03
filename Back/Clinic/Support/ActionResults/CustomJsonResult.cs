@@ -16,7 +16,8 @@
         private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc
             };
 
         private readonly OperationResult result;

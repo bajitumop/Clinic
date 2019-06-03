@@ -7,6 +7,10 @@
 
     public interface IVisitsRepository
     {
-        Task<IList<Visit>> FromRange(string username, DateTime from, DateTime to);
+        Task<IList<Visit>> ByUser(string username, DateTime from, DateTime to);
+
+        Task<IList<Visit>> All(DateTime from, DateTime to);
+
+        Task Create(string username, long serviceId, long doctorId, DateTime dateTime);
     }
 }

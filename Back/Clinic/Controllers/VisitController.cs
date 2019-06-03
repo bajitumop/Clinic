@@ -6,15 +6,16 @@
     using System.Threading.Tasks;
     using DataAccess.Repositories;
     using Domain;
+    using Services;
     using Support.Filters;
 
     using Microsoft.AspNetCore.Mvc;
+
 
     [MustBeAuthorized]
     [UserPermission(UserPermission.CanVisitDoctor)]
     [ApiController]
     [Route("visits")]
-    [UserPermission(UserPermission.CanVisitDoctor)]
     public class VisitController : BaseController
     {
         private readonly IUsersRepository usersRepository;
@@ -22,20 +23,21 @@
         private readonly IDoctorsRepository doctorsRepository;
         private readonly ISchedulesRepository schedulesRepository;
         private readonly IVisitsRepository visitsRepository;
+        private readonly ScheduleService scheduleService;
 
-        public VisitController(IUsersRepository usersRepository, IServicesRepository servicesRepository, IDoctorsRepository doctorsRepository, ISchedulesRepository schedulesRepository, IVisitsRepository visitsRepository)
+        public VisitController(IUsersRepository usersRepository, IServicesRepository servicesRepository, IDoctorsRepository doctorsRepository, ISchedulesRepository schedulesRepository, IVisitsRepository visitsRepository, ScheduleService scheduleService)
         {
             this.usersRepository = usersRepository;
             this.servicesRepository = servicesRepository;
             this.doctorsRepository = doctorsRepository;
             this.schedulesRepository = schedulesRepository;
             this.visitsRepository = visitsRepository;
+            this.scheduleService = scheduleService;
         }
 
-        /*[HttpPost, Route("create")]
-        public async Task<IActionResult> CreateVisit([FromQuery]long serviceId, [FromQuery]long doctorId, [FromQuery]DateTime dateTime)
+        [HttpPost, Route("create")]
+        public async Task<IActionResult> CreateVisit(long serviceId, long doctorId, DateTime dateTime)
         {
-            throw new NotImplementedException();
             var doctor = await this.doctorsRepository.GetAsync(doctorId);
             if (doctor == null)
             {
@@ -48,16 +50,22 @@
                 return this.Error("Указанная услуга отсутствует в базе", HttpStatusCode.NotFound);
             }
 
-            if (doctor.Schedules.Select(s => s.SpecialtyId).Contains(service.Specialty.Id))
+            if (doctor.Specialty != service.Specialty)
             {
                 return this.Error("Доктор не может выполнять эту услугу", HttpStatusCode.BadRequest);
             }
 
-            
+            var schedule = await this.schedulesRepository.GetAsync(doctorId);
+            var visits = (await this.visitsRepository.All(dateTime.Date, dateTime.Date.AddDays(1))).ToArray();
 
-            var visit = new Visit { User = this.GetUser(), Service = service, Doctor = doctor, DateTime = dateTime };
-            this.visitsRepository.Create(visit);
-            await this.visitsRepository.SaveChangesAsync();
+            var records = this.scheduleService.GetDoctorVisitsByDate(schedule, dateTime.Date, visits).ToArray();
+            var record = records.FirstOrDefault(r => r.DateTime == dateTime && r.Status == VisitStatus.Opened);
+            if (record == null || record.Status != VisitStatus.Opened)
+            {
+                return this.Error("Невозможно записаться на указанное время");
+            }
+            
+            await this.visitsRepository.Create(this.GetUser().Username, serviceId, doctorId, dateTime);
             return this.Success();
         }
 
@@ -69,14 +77,14 @@
 
             if (from > to)
             {
-                var temp = from;
-                from = to;
-                to = temp;
+                var temp = fromDate;
+                fromDate = toDate;
+                toDate = temp;
             }
 
             var username = this.GetUser()?.Username;
-            var visits = await this.visitsRepository.FromRange(username, fromDate, toDate);
+            var visits = await this.visitsRepository.ByUser(username, fromDate, toDate);
             return this.Success(visits.ToArray());
-        }*/
+        }
     }
 }
