@@ -10,7 +10,7 @@
     using Support.Filters;
 
     using Microsoft.AspNetCore.Mvc;
-
+    using Clinic.Models;
 
     [MustBeAuthorized]
     [UserPermission(UserPermission.CanVisitDoctor)]
@@ -72,7 +72,7 @@
         [HttpGet, Route("")]
         public async Task<IActionResult> Visits(DateTime? from = null, DateTime? to = null)
         {
-            var fromDate = from ?? DateTime.MinValue;
+            var fromDate = from ?? DateTime.UtcNow;
             var toDate = to ?? DateTime.MaxValue;
 
             if (from > to)
@@ -84,7 +84,35 @@
 
             var username = this.GetUser()?.Username;
             var visits = await this.visitsRepository.ByUser(username, fromDate, toDate);
-            return this.Success(visits.ToArray());
+            var doctors = await this.doctorsRepository.All();
+            var services = await this.servicesRepository.All();
+            var visitModels = visits.Select(v =>
+            {
+                var doctor = doctors.Single(d => d.Id == v.DoctorId);
+                var service = services.Single(s => s.Id == v.ServiceId);
+                var result = new VisitModel
+                {
+                    Id = v.Id,
+                    DateTime = v.DateTime,
+                    DoctorId = v.DoctorId,
+                    ServiceId = v.ServiceId,
+                    DoctorFirstName = doctor.FirstName,
+                    DoctorSecondName = doctor.SecondName,
+                    DoctorThirdName = doctor.ThirdName,
+                    Specialty = doctor.Specialty,
+                    ServiceDescription = service.Description
+                };
+                return result;
+            });
+            return this.Success(visitModels.OrderBy(v => v.DateTime).ToArray());
+        }
+
+        [HttpDelete, Route("")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            var username = this.GetUser()?.Username;
+            await this.visitsRepository.Delete(username, id);
+            return Success();
         }
     }
 }

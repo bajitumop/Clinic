@@ -33,5 +33,10 @@
             await this.connection.ExecuteScalarAsync<long>(@"insert into visits (""Username"", ""ServiceId"", ""DoctorId"", ""DateTime"", ""VisitStatus"") VALUES(@username, @serviceId, @doctorId, @dateTime, @visitStatus) returning ""Id""", 
                 new { username, serviceId, doctorId, dateTime, visitStatus = VisitStatus.Opened });
         }
+
+        public async Task Delete(string username, long id)
+        {
+            await this.connection.ExecuteAsync(@"delete from visits where ""Id"" = @id and ""Username"" = @username", new { id, username });
+        }
     }
 }
