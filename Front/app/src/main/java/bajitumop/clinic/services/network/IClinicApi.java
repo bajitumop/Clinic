@@ -42,4 +42,13 @@ public interface IClinicApi {
 
     @POST("account/register")
     Single<ApiResult<String>> register(@Body RegistrationModel model);
+
+    @GET("schedules")
+    Single<ApiResult<VisitInfoStatusModel[]>> getDoctorSchedule(@Query("doctorId")long doctorId);
+
+    @GET("visits")
+    Single<ApiResult<VisitInfoStatusModel[]>> getVisits(@Query("from")Date from, @Query("to")Date to);
+
+    @POST("visits/create")
+    Single<ApiResult<VisitInfoStatusModel[]>> createVisit(@Query("doctorId")long doctorId, @Query("serviceId")long serviceId, @Query("dateTime")long dateTime);
 }

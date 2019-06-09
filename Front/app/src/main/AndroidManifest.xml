@@ -28,8 +28,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".views.DoctorActivity" />
         <activity android:name=".views.ServiceActivity" />
-        <activity android:name=".views.RecordActivity"></activity>
-        <activity android:name=".views.VisitActivity"></activity>
+        <activity android:name=".views.RecordActivity" />
+        <activity android:name=".views.VisitActivity" />
     </application>
 
 </manifest>

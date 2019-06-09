@@ -8,10 +8,6 @@
         android:icon="@drawable/ic_visits_48dp"
         android:title="@string/nav_visits" />
     <item
-        android:id="@+id/nav_history_visits"
-        android:icon="@drawable/ic_visits_history_48dp"
-        android:title="@string/nav_history_visits" />
-    <item
         android:id="@+id/nav_doctors"
         android:icon="@drawable/ic_doctor_48dp"
         android:title="@string/nav_doctors" />
