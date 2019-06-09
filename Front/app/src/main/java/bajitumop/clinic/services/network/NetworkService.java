@@ -1,5 +1,8 @@
 package bajitumop.clinic.services.network;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 
 import bajitumop.clinic.BuildConfig;
@@ -35,12 +38,14 @@ public class NetworkService {
                             return chain.proceed(request);
                         }
                     })
+
                     .build();
 
             clinicApi = new Retrofit.Builder()
                     .baseUrl(HOST + "/api/")
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                     .build()
                     .create(IClinicApi.class);

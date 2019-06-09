@@ -15,6 +15,10 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingStart="@dimen/activity_half_horizontal_margin"
+    android:paddingEnd="@dimen/activity_half_horizontal_margin"
+    android:paddingTop="@dimen/activity_half_vertical_margin"
+    android:paddingBottom="@dimen/activity_half_vertical_margin"
     android:orientation="horizontal">
 
     <ImageView

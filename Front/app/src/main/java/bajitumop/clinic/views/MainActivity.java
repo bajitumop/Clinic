@@ -19,15 +19,18 @@ import bajitumop.clinic.R;
 import bajitumop.clinic.models.DoctorModel;
 import bajitumop.clinic.models.ServiceModel;
 import bajitumop.clinic.models.User;
+import bajitumop.clinic.models.VisitModel;
 import bajitumop.clinic.views.MainFragments.ContactsFragment;
 import bajitumop.clinic.views.MainFragments.DoctorsFragment;
 import bajitumop.clinic.views.MainFragments.ServicesFragment;
 import bajitumop.clinic.views.MainFragments.SettingsFragment;
+import bajitumop.clinic.views.MainFragments.VisitsFragment;
 
 public class MainActivity extends BaseActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         DoctorsFragment.IDoctorsListInteractionListener,
         ServicesFragment.IServicesListInteractionListener,
+        VisitsFragment.IVisitsListInteractionListener,
         SettingsFragment.IUserStorageProvider {
 
     Toolbar toolbar;
@@ -98,8 +101,7 @@ public class MainActivity extends BaseActivity implements
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_visits:
-                break;
-            case R.id.nav_history_visits:
+                setFragment(new VisitsFragment());
                 break;
             case R.id.nav_doctors:
                 setFragment(new DoctorsFragment());
@@ -154,4 +156,10 @@ public class MainActivity extends BaseActivity implements
         navigationUserTextView.setText(String.format("%s %s", user.getFirstName(), user.getSecondName()));
     }
 
+    @Override
+    public void onVisitClick(VisitModel visit) {
+        Intent intent = new Intent(this, VisitActivity.class);
+        intent.putExtra("visit", visit);
+        startActivity(intent);
+    }
 }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/activity_half_horizontal_margin"
+    android:paddingEnd="@dimen/activity_half_horizontal_margin"
+    android:paddingTop="@dimen/activity_half_vertical_margin"
+    android:paddingBottom="@dimen/activity_half_vertical_margin"
+    tools:context=".views.VisitActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="0dp"
+        android:layout_width="match_parent">
+
+        <TextView
+            android:id="@+id/dateTime"
+            android:text="Дата и время"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/activity_half_vertical_margin"
+            android:textSize="@dimen/header_text_size"/>
+
+        <TextView
+            android:id="@+id/specialty"
+            android:text="Специальность"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_half_vertical_margin"
+            android:textSize="@dimen/header_text_size"/>
+
+        <TextView
+            android:id="@+id/serviceDescription"
+            android:text="Наименование услуги"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_half_vertical_margin"
+            android:textSize="@dimen/header_text_size"/>
+
+        <TextView
+            android:id="@+id/doctor"
+            android:text="Доктор"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_half_vertical_margin"
+            android:textSize="@dimen/header_text_size"/>
+
+        <Button
+            android:id="@+id/deleteVisit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/colorAccent"
+            android:textColor="@color/textColorPrimary"
+            android:padding="@dimen/activity_half_horizontal_margin"
+            android:text="Отказаться"
+            />
+
+    </LinearLayout>
+
+</ScrollView>
