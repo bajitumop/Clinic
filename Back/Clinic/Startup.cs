@@ -39,9 +39,9 @@
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionString;
-            if (!this.environment.IsProduction())
+            connectionString = this.appConfiguration.GetConnectionString("DbConnection");
+            /*if (!this.environment.IsProduction())
             {
-                connectionString = this.appConfiguration.GetConnectionString("DbConnection");
             }
             else
             {
@@ -59,7 +59,7 @@
                                   };
 
                 connectionString = builder.ToString();
-            }
+            }*/
 
             services.AddMvc(options =>
                 {

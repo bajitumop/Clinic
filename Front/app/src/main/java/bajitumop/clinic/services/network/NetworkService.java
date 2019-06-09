@@ -15,7 +15,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkService {
-    public static final String HOST = "http://192.168.1.38:8888";
+    public static final String HOST = "http://10.0.2.2:5000";
     private static IClinicApi clinicApi;
 
     public static IClinicApi Create(){
