@@ -38,8 +38,12 @@ public class ServicesFragment extends BaseListFragment<ServicesFragment.IService
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        reload();
+    }
+
+    private void reload() {
         setProgress();
         sendRequest(clinicApi.getServices(), new IOnResponseCallback<ServiceModel[]>() {
             @Override
