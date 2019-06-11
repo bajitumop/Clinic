@@ -3,7 +3,6 @@ package bajitumop.clinic.views.MainFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,19 +39,20 @@ public class ServicesFragment extends BaseListFragment<ServicesFragment.IService
     @Override
     public void onResume() {
         super.onResume();
-        reload();
-    }
-
-    private void reload() {
         setProgress();
         sendRequest(clinicApi.getServices(), new IOnResponseCallback<ServiceModel[]>() {
             @Override
             public void onResponse(ApiResult<ServiceModel[]> result) {
                 if (result.isSuccess()) {
+                    ServiceModel[] data = result.getData();
                     services.clear();
-                    services.addAll(Arrays.asList(result.getData()));
+                    services.addAll(Arrays.asList(data));
                     adapter.notifyDataSetChanged();
-                    setContent();
+                    if (data.length == 0) {
+                        setEmpty();
+                    } else {
+                        setContent();
+                    }
                 } else {
                     setConnectionError();
                 }

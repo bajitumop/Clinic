@@ -15,12 +15,11 @@ import bajitumop.clinic.models.LoginResponse;
 import bajitumop.clinic.models.RegistrationModel;
 import bajitumop.clinic.models.User;
 import bajitumop.clinic.services.network.IOnResponseCallback;
-import bajitumop.clinic.services.security.IHashAlgorithm;
 import bajitumop.clinic.services.security.Sha256HashAlgorithm;
 
 public class LoginActivity extends BaseActivity {
 
-    private IHashAlgorithm hashAlgorithm = Sha256HashAlgorithm.Create();
+    private Sha256HashAlgorithm hashAlgorithm = Sha256HashAlgorithm.Create();
 
     private TextView loginTitle;
     private TextView loginSecondPage;
@@ -71,7 +70,6 @@ public class LoginActivity extends BaseActivity {
         super.onResume();
         if (getUser() != null) {
             startMainActivity();
-            return;
         }
     }
 

@@ -28,12 +28,8 @@ public abstract class BaseFragment extends Fragment {
         compositeDisposable.clear();
     }
 
-    protected void snackbar(View v, String text, int time) {
-        Snackbar.make(v, text, time).show();
-    }
-
     protected void snackbar(View v, String text) {
-        snackbar(v, text, Snackbar.LENGTH_LONG);
+        Snackbar.make(v, text, Snackbar.LENGTH_LONG).show();
     }
 
     protected <T> void sendRequest(@NonNull Single<ApiResult<T>> single, @NonNull final IOnResponseCallback<T> onResponse) {

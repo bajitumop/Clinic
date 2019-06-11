@@ -28,7 +28,7 @@ public class DoctorActivity extends AppCompatActivity {
     }
 
     private void initFields(){
-        ((TextView)findViewById(R.id.name)).setText(String.format("%s %s %s", doctor.getSecondName(), doctor.getFirstName(), doctor.getThirdName()));
+        ((TextView)findViewById(R.id.name)).setText(doctor.getFullName());
         ((TextView)findViewById(R.id.specialty)).setText(doctor.getSpecialty());
         ((TextView)findViewById(R.id.info)).setText(doctor.getInfo());
 
@@ -46,8 +46,8 @@ public class DoctorActivity extends AppCompatActivity {
 
         Glide.with(this)
                 .applyDefaultRequestOptions(new RequestOptions()
-                        .placeholder(R.drawable.ic_doctor_48dp)
-                        .error(R.drawable.ic_doctor_48dp))
+                        .placeholder(R.drawable.ic_doctors_48dp)
+                        .error(R.drawable.ic_doctors_48dp))
                 .load(NetworkService.HOST + doctor.getImageUrl())
                 .apply(RequestOptions.circleCropTransform())
                 .into(((ImageView)findViewById(R.id.image)));

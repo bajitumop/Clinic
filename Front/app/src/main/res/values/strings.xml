@@ -40,4 +40,5 @@
     <string name="price">Цена</string>
     <string name="serviceName">Наименование услуги</string>
     <string name="create_visit">Записаться</string>
+    <string name="empty_list">Список пуст</string>
 </resources>

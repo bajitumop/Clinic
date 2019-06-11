@@ -74,8 +74,8 @@ public class DoctorsListAdapter extends RecyclerView.Adapter<DoctorsListAdapter.
             specialty.setText(doctor.getSpecialty());
             Glide.with(context)
                     .applyDefaultRequestOptions(new RequestOptions()
-                    .placeholder(R.drawable.ic_doctor_48dp)
-                    .error(R.drawable.ic_doctor_48dp))
+                    .placeholder(R.drawable.ic_doctors_48dp)
+                    .error(R.drawable.ic_doctors_48dp))
                     .load(NetworkService.HOST + doctor.getImageUrl())
                     .apply(RequestOptions.circleCropTransform())
                     .into(doctorImage);

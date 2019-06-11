@@ -9,7 +9,7 @@
         android:title="@string/nav_visits" />
     <item
         android:id="@+id/nav_doctors"
-        android:icon="@drawable/ic_doctor_48dp"
+        android:icon="@drawable/ic_doctors_48dp"
         android:title="@string/nav_doctors" />
     <item
         android:id="@+id/nav_services"

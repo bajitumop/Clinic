@@ -44,19 +44,20 @@ public class DoctorsFragment extends BaseListFragment<DoctorsFragment.IDoctorsLi
     @Override
     public void onResume() {
         super.onResume();
-        reload();
-    }
-
-    private void reload() {
         setProgress();
         sendRequest(clinicApi.getDoctors(), new IOnResponseCallback<DoctorModel[]>() {
             @Override
             public void onResponse(ApiResult<DoctorModel[]> result) {
                 if (result.isSuccess()) {
+                    DoctorModel[] data = result.getData();
                     doctors.clear();
-                    doctors.addAll(Arrays.asList(result.getData()));
+                    doctors.addAll(Arrays.asList(data));
                     adapter.notifyDataSetChanged();
-                    setContent();
+                    if (data.length == 0) {
+                        setEmpty();
+                    } else {
+                        setContent();
+                    }
                 } else {
                     setConnectionError();
                 }

@@ -15,12 +15,11 @@ import bajitumop.clinic.models.ApiResult;
 import bajitumop.clinic.models.Empty;
 import bajitumop.clinic.models.User;
 import bajitumop.clinic.services.network.IOnResponseCallback;
-import bajitumop.clinic.services.security.IHashAlgorithm;
 import bajitumop.clinic.services.security.Sha256HashAlgorithm;
 import bajitumop.clinic.views.BaseFragment;
 
 public class SettingsFragment extends BaseFragment {
-    private IHashAlgorithm hashAlgorithm = Sha256HashAlgorithm.Create();
+    private Sha256HashAlgorithm hashAlgorithm = Sha256HashAlgorithm.Create();
     private IUserStorageProvider userStorageProvider;
 
     private EditText firstNameEditText;

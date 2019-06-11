@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,9 +12,6 @@
         android:layout_width="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/doctorsList"
             android:name="bajitumop.clinic.views.MainFragments.DoctorsFragment"
             android:layout_width="match_parent"
@@ -21,8 +20,9 @@
             tools:context=".views.MainFragments.DoctorsFragment"
             tools:listitem="@layout/fragment_doctor_item" />
 
-        <include layout="@layout/layout_progress" android:id="@+id/progressView" />
-        <include layout="@layout/layout_connection_error" android:id="@+id/connectionErrorView" />
+        <include layout="@layout/layout_progress" />
+        <include layout="@layout/layout_connection_error"/>
+        <include layout="@layout/layout_empty_view" />
 
     </ViewFlipper>
 </FrameLayout>

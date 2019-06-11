@@ -53,6 +53,7 @@ public class MainActivity extends BaseActivity implements
 
         initDrawerLayout(user);
         initFab();
+        setFragment(new VisitsFragment());
     }
 
     private void initFab() {

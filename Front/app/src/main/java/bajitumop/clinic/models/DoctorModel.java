@@ -1,29 +1,20 @@
 package bajitumop.clinic.models;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 public class DoctorModel implements Serializable {
-    @SerializedName("id")
     private long id;
 
-    @SerializedName("firstName")
     private String firstName;
 
-    @SerializedName("secondName")
     private String secondName;
 
-    @SerializedName("thirdName")
     private String thirdName;
 
-    @SerializedName("imageUrl")
     private String imageUrl;
 
-    @SerializedName("info")
     private String info;
 
-    @SerializedName("specialty")
     private String specialty;
 
     public long getId() {
@@ -84,6 +75,14 @@ public class DoctorModel implements Serializable {
 
     @Override
     public String toString() {
+        return getShortName();
+    }
+
+    public String getFullName(){
+        return String.format("%s %s %s", secondName, firstName, thirdName);
+    }
+
+    public String getShortName(){
         return String.format("%s %s. %s.", secondName, firstName.charAt(0), thirdName.charAt(0));
     }
 }

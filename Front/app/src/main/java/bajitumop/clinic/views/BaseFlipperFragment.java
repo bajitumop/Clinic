@@ -11,6 +11,7 @@ public abstract class BaseFlipperFragment extends BaseFragment {
     private final int CONTENT_VIEW = 0;
     private final int PROGRESS_VIEW = 1;
     private final int CONNECTION_ERROR_VIEW = 2;
+    private final int EMPTY_LIST_VIEW = 3;
 
     private ViewFlipper viewFlipper;
 
@@ -29,6 +30,10 @@ public abstract class BaseFlipperFragment extends BaseFragment {
 
     protected void setConnectionError() {
         setView(CONNECTION_ERROR_VIEW);
+    }
+
+    protected void setEmpty() {
+        setView(EMPTY_LIST_VIEW);
     }
 
     private void setView(int child) {

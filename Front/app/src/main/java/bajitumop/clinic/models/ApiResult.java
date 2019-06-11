@@ -1,15 +1,10 @@
 package bajitumop.clinic.models;
 
-import com.google.gson.annotations.SerializedName;
-
 public class ApiResult<Data> {
-    @SerializedName("success")
     private boolean success;
 
-    @SerializedName("message")
     private String message;
 
-    @SerializedName("data")
     private Data data;
 
     public boolean isSuccess() {

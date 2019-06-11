@@ -50,5 +50,8 @@ public interface IClinicApi {
     Single<ApiResult<VisitInfoStatusModel[]>> getVisits(@Query("from")Date from, @Query("to")Date to);
 
     @POST("visits/create")
-    Single<ApiResult<VisitInfoStatusModel[]>> createVisit(@Query("doctorId")long doctorId, @Query("serviceId")long serviceId, @Query("dateTime")long dateTime);
+    Single<ApiResult<VisitInfoStatusModel[]>> createVisit(
+            @Query("doctorId")long doctorId,
+            @Query("serviceId")long serviceId,
+            @Query("dateTime")String dateTime);
 }

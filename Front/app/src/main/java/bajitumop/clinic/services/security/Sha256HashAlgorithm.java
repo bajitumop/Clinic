@@ -2,7 +2,7 @@ package bajitumop.clinic.services.security;
 
 import java.security.MessageDigest;
 
-public class Sha256HashAlgorithm implements IHashAlgorithm {
+public class Sha256HashAlgorithm {
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
     private static Sha256HashAlgorithm instance;
     private MessageDigest md;
@@ -23,7 +23,6 @@ public class Sha256HashAlgorithm implements IHashAlgorithm {
         return instance;
     }
 
-    @Override
     public String hash(String text) {
         byte[] bytes = md.digest(text.getBytes());
         char[] hexChars = new char[bytes.length * 2];
