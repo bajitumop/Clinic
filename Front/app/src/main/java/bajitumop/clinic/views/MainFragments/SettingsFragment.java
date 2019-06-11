@@ -15,7 +15,7 @@ import bajitumop.clinic.models.ApiResult;
 import bajitumop.clinic.models.Empty;
 import bajitumop.clinic.models.User;
 import bajitumop.clinic.services.network.IOnResponseCallback;
-import bajitumop.clinic.services.security.Sha256HashAlgorithm;
+import bajitumop.clinic.services.Sha256HashAlgorithm;
 import bajitumop.clinic.views.BaseFragment;
 
 public class SettingsFragment extends BaseFragment {

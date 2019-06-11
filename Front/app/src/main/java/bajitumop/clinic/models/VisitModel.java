@@ -93,4 +93,8 @@ public class VisitModel implements Serializable {
     public void setServiceDescription(String serviceDescription) {
         this.serviceDescription = serviceDescription;
     }
+
+    public String getFullDoctorName() {
+        return String.format("%s %s %s", doctorSecondName, doctorFirstName, doctorThirdName);
+    }
 }

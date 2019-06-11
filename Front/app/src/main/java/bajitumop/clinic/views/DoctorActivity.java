@@ -15,23 +15,16 @@ import bajitumop.clinic.models.DoctorModel;
 import bajitumop.clinic.services.network.NetworkService;
 
 public class DoctorActivity extends AppCompatActivity {
-
-    private DoctorModel doctor;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor);
         Intent intent = getIntent();
-        doctor = (DoctorModel)intent.getSerializableExtra("doctor");
-        initFields();
-    }
+        final DoctorModel doctor = (DoctorModel)intent.getSerializableExtra("doctor");
 
-    private void initFields(){
         ((TextView)findViewById(R.id.name)).setText(doctor.getFullName());
         ((TextView)findViewById(R.id.specialty)).setText(doctor.getSpecialty());
         ((TextView)findViewById(R.id.info)).setText(doctor.getInfo());
-
 
         findViewById(R.id.makeRecord).setOnClickListener(new View.OnClickListener() {
             @Override

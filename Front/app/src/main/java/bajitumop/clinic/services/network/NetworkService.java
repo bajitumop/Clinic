@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import bajitumop.clinic.BuildConfig;
 import bajitumop.clinic.ClinicApplication;
+import bajitumop.clinic.services.DateTime;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -45,7 +46,7 @@ public class NetworkService {
                     .baseUrl(HOST + "/api/")
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create()))
+                    .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setDateFormat(DateTime.ISO).create()))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                     .build()
                     .create(IClinicApi.class);

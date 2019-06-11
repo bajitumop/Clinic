@@ -1,4 +1,4 @@
-package bajitumop.clinic.services.security;
+package bajitumop.clinic.services;
 
 import java.security.MessageDigest;
 

@@ -1,6 +1,5 @@
 package bajitumop.clinic.views.MainFragments;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +12,10 @@ import bajitumop.clinic.R;
 import bajitumop.clinic.models.ServiceModel;
 
 public class ServicesListAdapter extends RecyclerView.Adapter<ServicesListAdapter.ViewHolder> {
-
-    private final Context context;
     private final ServicesFragment.IServicesListInteractionListener listener;
     private List<ServiceModel> services;
 
-    public ServicesListAdapter(Context context, List<ServiceModel> services, ServicesFragment.IServicesListInteractionListener listener) {
-        this.context = context;
+    public ServicesListAdapter(List<ServiceModel> services, ServicesFragment.IServicesListInteractionListener listener) {
         this.services = services;
         this.listener = listener;
     }

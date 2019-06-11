@@ -30,7 +30,7 @@ public class ServicesFragment extends BaseListFragment<ServicesFragment.IService
         Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.servicesList);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new ServicesListAdapter(context, services, listener);
+        adapter = new ServicesListAdapter(services, listener);
         recyclerView.setAdapter(adapter);
 
         return view;

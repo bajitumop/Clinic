@@ -1,27 +1,21 @@
 package bajitumop.clinic.views.MainFragments;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
-
 import bajitumop.clinic.R;
 import bajitumop.clinic.models.VisitModel;
+import bajitumop.clinic.services.DateTime;
 
 public class VisitsListAdapter extends RecyclerView.Adapter<VisitsListAdapter.ViewHolder> {
 
-        private final Context context;
         private final VisitsFragment.IVisitsListInteractionListener listener;
         private List<VisitModel> visits;
 
-        public VisitsListAdapter(Context context, List<VisitModel> visits, VisitsFragment.IVisitsListInteractionListener listener) {
-            this.context = context;
+        public VisitsListAdapter(List<VisitModel> visits, VisitsFragment.IVisitsListInteractionListener listener) {
             this.visits = visits;
             this.listener = listener;
         }
@@ -51,7 +45,6 @@ public class VisitsListAdapter extends RecyclerView.Adapter<VisitsListAdapter.Vi
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            private final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd.MM.yyyy в HH:mm", Locale.getDefault());
             private View mView;
             TextView serviceDescription;
             TextView dateTime;
@@ -67,7 +60,7 @@ public class VisitsListAdapter extends RecyclerView.Adapter<VisitsListAdapter.Vi
             public void setService(VisitModel visit){
                 this.visit = visit;
                 serviceDescription.setText(visit.getServiceDescription());
-                dateTime.setText(dateTimeFormat.format(visit.getDateTime()));
+                dateTime.setText(DateTime.formatFullDate(visit.getDateTime()));
             }
 
             public VisitModel getVisit() {

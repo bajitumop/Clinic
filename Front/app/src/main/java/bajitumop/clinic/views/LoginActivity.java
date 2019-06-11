@@ -15,7 +15,7 @@ import bajitumop.clinic.models.LoginResponse;
 import bajitumop.clinic.models.RegistrationModel;
 import bajitumop.clinic.models.User;
 import bajitumop.clinic.services.network.IOnResponseCallback;
-import bajitumop.clinic.services.security.Sha256HashAlgorithm;
+import bajitumop.clinic.services.Sha256HashAlgorithm;
 
 public class LoginActivity extends BaseActivity {
 

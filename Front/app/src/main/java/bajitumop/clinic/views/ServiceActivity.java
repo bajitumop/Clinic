@@ -10,19 +10,13 @@ import bajitumop.clinic.R;
 import bajitumop.clinic.models.ServiceModel;
 
 public class ServiceActivity extends AppCompatActivity {
-
-    private ServiceModel service;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
         Intent intent = getIntent();
-        service = (ServiceModel)intent.getSerializableExtra("service");
-        initFields();
-    }
+        final ServiceModel service = (ServiceModel)intent.getSerializableExtra("service");
 
-    private void initFields(){
         ((TextView)findViewById(R.id.description)).setText(service.getDescription());
         ((TextView)findViewById(R.id.additionalInfo)).setText(service.getAdditionalInfo());
         ((TextView)findViewById(R.id.specialty)).setText(service.getSpecialty());

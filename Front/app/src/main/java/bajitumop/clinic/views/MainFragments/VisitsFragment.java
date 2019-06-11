@@ -30,7 +30,7 @@ public class VisitsFragment extends BaseListFragment<VisitsFragment.IVisitsListI
         Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.visitsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new VisitsListAdapter(context, visits, listener);
+        adapter = new VisitsListAdapter(visits, listener);
         recyclerView.setAdapter(adapter);
 
         return view;
