@@ -17,6 +17,7 @@ import bajitumop.clinic.models.ApiResult;
 import bajitumop.clinic.models.VisitModel;
 import bajitumop.clinic.services.network.IOnResponseCallback;
 import bajitumop.clinic.views.BaseListFragment;
+import bajitumop.clinic.views.MainActivity;
 
 public class VisitsFragment extends BaseListFragment<VisitsFragment.IVisitsListInteractionListener> {
 
@@ -25,6 +26,7 @@ public class VisitsFragment extends BaseListFragment<VisitsFragment.IVisitsListI
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(R.string.visits_title);
         View view = inflater.inflate(R.layout.fragment_visits_list, container, false);
 
         Context context = view.getContext();

@@ -9,10 +9,11 @@ import android.widget.TextView;
 import bajitumop.clinic.R;
 import bajitumop.clinic.models.ServiceModel;
 
-public class ServiceActivity extends AppCompatActivity {
+public class ServiceActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle(R.string.details_activity_title);
         setContentView(R.layout.activity_service);
         Intent intent = getIntent();
         final ServiceModel service = (ServiceModel)intent.getSerializableExtra("service");

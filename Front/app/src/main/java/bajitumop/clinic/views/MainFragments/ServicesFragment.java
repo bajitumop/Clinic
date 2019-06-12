@@ -17,6 +17,7 @@ import bajitumop.clinic.models.ApiResult;
 import bajitumop.clinic.models.ServiceModel;
 import bajitumop.clinic.services.network.IOnResponseCallback;
 import bajitumop.clinic.views.BaseListFragment;
+import bajitumop.clinic.views.MainActivity;
 
 public class ServicesFragment extends BaseListFragment<ServicesFragment.IServicesListInteractionListener> {
 
@@ -25,6 +26,7 @@ public class ServicesFragment extends BaseListFragment<ServicesFragment.IService
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(R.string.services_title);
         View view = inflater.inflate(R.layout.fragment_services_list, container, false);
 
         Context context = view.getContext();

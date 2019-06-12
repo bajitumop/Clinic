@@ -14,10 +14,11 @@ import bajitumop.clinic.R;
 import bajitumop.clinic.models.DoctorModel;
 import bajitumop.clinic.services.network.NetworkService;
 
-public class DoctorActivity extends AppCompatActivity {
+public class DoctorActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle(R.string.details_activity_title);
         setContentView(R.layout.activity_doctor);
         Intent intent = getIntent();
         final DoctorModel doctor = (DoctorModel)intent.getSerializableExtra("doctor");

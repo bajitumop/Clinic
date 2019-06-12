@@ -15,6 +15,7 @@ public class VisitActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle(R.string.details_activity_title);
         setContentView(R.layout.activity_visit);
         Intent intent = getIntent();
         final VisitModel visit = (VisitModel) intent.getSerializableExtra("visit");

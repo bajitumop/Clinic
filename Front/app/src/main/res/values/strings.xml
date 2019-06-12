@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Clinic</string>
+    <string name="app_name">КС Клиника</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Имя пользователя</string>
@@ -41,4 +41,11 @@
     <string name="serviceName">Наименование услуги</string>
     <string name="create_visit">Записаться</string>
     <string name="empty_list">Список пуст</string>
+    <string name="contacts_title">Контакты</string>
+    <string name="doctors_title">Врачи</string>
+    <string name="services_title">Услуги</string>
+    <string name="visits_title">Ближайшие записи</string>
+    <string name="settings_title">Настройки</string>
+    <string name="details_activity_title">Детальная информация</string>
+    <string name="record_activity_title">Запись на прием</string>
 </resources>

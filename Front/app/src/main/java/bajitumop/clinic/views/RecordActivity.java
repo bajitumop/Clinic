@@ -55,6 +55,7 @@ public class RecordActivity extends BaseActivity implements VisitDateTimePickerF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle(R.string.record_activity_title);
         setContentView(R.layout.activity_record);
 
         scrollView = findViewById(R.id.scrollView);

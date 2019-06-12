@@ -17,6 +17,7 @@ import bajitumop.clinic.models.User;
 import bajitumop.clinic.services.network.IOnResponseCallback;
 import bajitumop.clinic.services.Sha256HashAlgorithm;
 import bajitumop.clinic.views.BaseFragment;
+import bajitumop.clinic.views.MainActivity;
 
 public class SettingsFragment extends BaseFragment {
     private Sha256HashAlgorithm hashAlgorithm = Sha256HashAlgorithm.Create();
@@ -31,6 +32,7 @@ public class SettingsFragment extends BaseFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(R.string.settings_title);
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 
