@@ -29,7 +29,6 @@ public class VisitDateTimePickerFragment extends BaseFragment implements OnTimeC
     private VisitInfoStatusModel[] visitInfoStatusModels;
     private ArrayList<VisitInfoStatusModel> visitStatusesForList = new ArrayList<>();
     private Date currentSelectedDateTime;
-    private ScrollView scrollView;
 
     private Button confirm;
     private TextView result;
@@ -37,14 +36,13 @@ public class VisitDateTimePickerFragment extends BaseFragment implements OnTimeC
 
     public void setDoctorId(long doctorId) {
         this.doctorId = doctorId;
-        loadDoctorSchedule();
+        reload();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_visit_date_time_picker, container, false);
         result = view.findViewById(R.id.resultDate);
-        scrollView = view.findViewById(R.id.scrollViewFragment);
         calendarView = view.findViewById(R.id.calendar);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -89,10 +87,12 @@ public class VisitDateTimePickerFragment extends BaseFragment implements OnTimeC
     @Override
     public void onResume() {
         super.onResume();
-        loadDoctorSchedule();
+        reload();
     }
 
-    private void loadDoctorSchedule() {
+    public void reload() {
+        confirm.setEnabled(false);
+        confirm.setBackgroundColor(getResources().getColor(R.color.disabled_background));
         sendRequest(clinicApi.getDoctorSchedule(doctorId), new IOnResponseCallback<VisitInfoStatusModel[]>() {
             @Override
             public void onResponse(ApiResult<VisitInfoStatusModel[]> result) {
@@ -143,10 +143,8 @@ public class VisitDateTimePickerFragment extends BaseFragment implements OnTimeC
         this.currentSelectedDateTime = visitStatusModel.getDate();
         result.setText(DateTime.formatFullDate(this.currentSelectedDateTime));
         confirm.getParent().requestChildFocus(confirm, confirm);
-    }
-
-    public void reload() {
-        loadDoctorSchedule();
+        confirm.setEnabled(true);
+        confirm.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
     public interface OnDateTimeSelectListener {
