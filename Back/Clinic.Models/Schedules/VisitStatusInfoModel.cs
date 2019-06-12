@@ -8,5 +8,10 @@ namespace Clinic.Models.Schedules
         public DateTime DateTime { get; set; }
 
         public VisitStatus Status { get; set; }
+
+        public override string ToString()
+        {
+            return $"{DateTime.ToString("dd.MM.yyyy HH:mm")}, {Status}";
+        }
     }
 }

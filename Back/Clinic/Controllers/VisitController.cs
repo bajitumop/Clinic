@@ -55,12 +55,10 @@
                 return this.Error("Доктор не может выполнять эту услугу", HttpStatusCode.BadRequest);
             }
 
-            var schedule = await this.schedulesRepository.GetAsync(doctorId);
-            var visits = (await this.visitsRepository.All(dateTime.Date, dateTime.Date.AddDays(1))).ToArray();
-
-            var records = this.scheduleService.GetDoctorVisitsByDate(schedule, dateTime.Date, visits).ToArray();
-            var record = records.FirstOrDefault(r => r.DateTime == dateTime && r.Status == VisitStatus.Opened);
-            if (record == null || record.Status != VisitStatus.Opened)
+            dateTime = dateTime.ToUniversalTime();
+            var recordStatuses = await this.scheduleService.GetDoctorVisits(doctorId);
+            var freeRecord = recordStatuses.FirstOrDefault(r => r.DateTime == dateTime && r.Status == VisitStatus.Opened);
+            if (freeRecord == null)
             {
                 return this.Error("Невозможно записаться на указанное время");
             }

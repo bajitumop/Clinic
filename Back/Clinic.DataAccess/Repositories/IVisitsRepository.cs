@@ -9,7 +9,7 @@
     {
         Task<IList<Visit>> ByUser(string username, DateTime from, DateTime to);
 
-        Task<IList<Visit>> All(DateTime from, DateTime to);
+        Task<IList<Visit>> ByDoctor(long doctorId, DateTime from, DateTime to);
 
         Task Create(string username, long serviceId, long doctorId, DateTime dateTime);
 

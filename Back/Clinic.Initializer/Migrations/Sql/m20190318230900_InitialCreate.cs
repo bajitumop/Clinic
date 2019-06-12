@@ -56,8 +56,8 @@ create table visits(
     ""Username"" varchar not null,
     ""DoctorId"" bigint not null,
     ""ServiceId"" bigint not null,
-    ""DateTime"" timestamptz not null,
-    ""VisitStatus"" int not null
+    ""DateTime"" timestamp not null,
+    ""Status"" int not null
 );";
     }
 }

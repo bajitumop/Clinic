@@ -8,54 +8,28 @@ using Clinic.Services;
 
 namespace Clinic.Controllers
 {
-    using AutoMapper;
-
-    using DataAccess.Repositories;
-
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
     [Route("schedules")]
     public class ScheduleController : BaseController
     {
-        private readonly ISchedulesRepository schedulesRepository;
-        private readonly IDoctorsRepository doctorsRepository;
-        private readonly IMapper mapper;
         private readonly ScheduleService scheduleService;
-        private readonly IVisitsRepository visitsRepository;
 
-        public ScheduleController(ISchedulesRepository schedulesRepository, IMapper mapper, ScheduleService scheduleService, 
-            IDoctorsRepository doctorsRepository, IVisitsRepository visitsRepository)
+        public ScheduleController(ScheduleService scheduleService)
         {
-            this.schedulesRepository = schedulesRepository;
-            this.mapper = mapper;
             this.scheduleService = scheduleService;
-            this.doctorsRepository = doctorsRepository;
-            this.visitsRepository = visitsRepository;
         }
 
         [HttpGet, Route("")]
         public async Task<IActionResult> GetDoctorSchedule(int doctorId)
         {
-            var now = DateTime.UtcNow.Date;
-            const int days = 14;
-            var schedule = await this.schedulesRepository.GetAsync(doctorId);
-            if (schedule == null)
-            {
-                return Success(new VisitStatusInfoModel[0]);
-            }
-
-            var visits = (await this.visitsRepository.All(now, now.AddDays(days))).ToArray();
-
-            var records = Enumerable.Range(0, days)
-                .SelectMany(i => this.scheduleService.GetDoctorVisitsByDate(schedule, now.AddDays(i), visits))
-                .ToArray();
-
-            PopulateRecords(records);
+            var records = await this.scheduleService.GetDoctorVisits(doctorId);
+            PopulateRandomRecords(records);
             return Success(records);
         }
 
-        private void PopulateRecords(VisitStatusInfoModel[] records)
+        private void PopulateRandomRecords(IList<VisitStatusInfoModel> records)
         {
             var random = new Random();
             foreach (var statusInfo in records)
