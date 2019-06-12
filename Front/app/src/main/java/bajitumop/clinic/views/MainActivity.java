@@ -61,6 +61,8 @@ public class MainActivity extends BaseActivity implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, RecordActivity.class);
+                startActivity(intent);
             }
         });
     }

@@ -64,9 +64,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="datetime"
+                    android:layout_marginBottom="@dimen/activity_half_vertical_margin"
                     android:hint="Дата и время записи"/>
             </android.support.design.widget.TextInputLayout>
 
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/textColorAccent"
+                android:background="@color/colorAccent"
+                android:paddingStart="@dimen/activity_half_horizontal_margin"
+                android:paddingEnd="@dimen/activity_half_horizontal_margin"
+                android:enabled="false"
+                android:text="Записаться на прием"/>
 
         </LinearLayout>
 

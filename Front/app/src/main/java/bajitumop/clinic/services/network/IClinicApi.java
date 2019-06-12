@@ -1,7 +1,5 @@
 package bajitumop.clinic.services.network;
 
-import java.util.Date;
-
 import bajitumop.clinic.models.ApiResult;
 import bajitumop.clinic.models.DoctorModel;
 import bajitumop.clinic.models.Empty;
@@ -22,11 +20,23 @@ import retrofit2.http.Query;
 
 public interface IClinicApi {
 
+    @POST("account/login")
+    Single<ApiResult<LoginResponse>> login(@Body LoginModel model);
+
+    @POST("account/register")
+    Single<ApiResult<String>> register(@Body RegistrationModel model);
+
+    @PUT("users/update")
+    Single<ApiResult<Empty>> updateUser(@Body User user);
+
     @GET("doctors")
     Single<ApiResult<DoctorModel[]>> getDoctors();
 
     @GET("services")
     Single<ApiResult<ServiceModel[]>> getServices();
+
+    @GET("schedules")
+    Single<ApiResult<VisitInfoStatusModel[]>> getDoctorSchedule(@Query("doctorId")long doctorId);
 
     @GET("visits")
     Single<ApiResult<VisitModel[]>> getVisits();
@@ -34,24 +44,9 @@ public interface IClinicApi {
     @DELETE("visits")
     Single<ApiResult<Empty>> DeleteVisit(@Query("id")long id);
 
-    @PUT("users/update")
-    Single<ApiResult<Empty>> updateUser(@Body User user);
-
-    @POST("account/login")
-    Single<ApiResult<LoginResponse>> login(@Body LoginModel model);
-
-    @POST("account/register")
-    Single<ApiResult<String>> register(@Body RegistrationModel model);
-
-    @GET("schedules")
-    Single<ApiResult<VisitInfoStatusModel[]>> getDoctorSchedule(@Query("doctorId")long doctorId);
-
-    @GET("visits")
-    Single<ApiResult<VisitInfoStatusModel[]>> getVisits(@Query("from")Date from, @Query("to")Date to);
-
     @POST("visits/create")
     Single<ApiResult<VisitInfoStatusModel[]>> createVisit(
             @Query("doctorId")long doctorId,
             @Query("serviceId")long serviceId,
-            @Query("dateTime")String dateTime);
+            @Query("dateTime")String isoDateTime);
 }

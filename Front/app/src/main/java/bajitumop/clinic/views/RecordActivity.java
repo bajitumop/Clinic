@@ -6,29 +6,28 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ViewFlipper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import bajitumop.clinic.R;
 import bajitumop.clinic.models.ApiResult;
 import bajitumop.clinic.models.DoctorModel;
 import bajitumop.clinic.models.ServiceModel;
+import bajitumop.clinic.models.VisitInfoStatusModel;
+import bajitumop.clinic.services.DateTime;
 import bajitumop.clinic.services.network.IOnResponseCallback;
 
 public class RecordActivity extends BaseActivity implements VisitDateTimePickerFragment.OnDateTimeSelectListener {
 
     private final int SPINNERS_VIEW = 0;
     private final int CALENDAR_VIEW = 1;
-
     private final int DEFAULT_ID = -1;
-    private static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd.MM.yyyy в HH:mm", Locale.getDefault());
 
     private DoctorModel[] doctors;
     private ServiceModel[] services;
@@ -41,13 +40,15 @@ public class RecordActivity extends BaseActivity implements VisitDateTimePickerF
     private Spinner serviceSpinner;
     private Spinner doctorSpinner;
 
-    ArrayAdapter<String> specialtyAdapter;
-    ArrayAdapter<ServiceModel> serviceAdapter;
-    ArrayAdapter<DoctorModel> doctorAdapter;
+    private ArrayAdapter<String> specialtyAdapter;
+    private ArrayAdapter<ServiceModel> serviceAdapter;
+    private ArrayAdapter<DoctorModel> doctorAdapter;
 
-    VisitDateTimePickerFragment visitPickerFragment;
-    ViewFlipper viewFlipper;
-    EditText dateTime;
+    private VisitDateTimePickerFragment visitPickerFragment;
+    private ViewFlipper viewFlipper;
+    private EditText dateTime;
+    private Button submit;
+    private Date currentDateTime = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,9 @@ public class RecordActivity extends BaseActivity implements VisitDateTimePickerF
         initSpecialty = intent.getStringExtra("specialty");
         initServiceId = intent.getIntExtra("serviceId", DEFAULT_ID);
         initDoctorId = intent.getIntExtra("doctorId", DEFAULT_ID);
-        visitPickerFragment.setDoctorId(initDoctorId);
+        if (initDoctorId != DEFAULT_ID) {
+            visitPickerFragment.setDoctorId(initDoctorId);
+        }
 
         specialtySpinner = findViewById(R.id.specialtySpinner);
         serviceSpinner = findViewById(R.id.serviceSpinner);
@@ -76,6 +79,13 @@ public class RecordActivity extends BaseActivity implements VisitDateTimePickerF
             }
         });
 
+        submit = findViewById(R.id.submit);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createRecord();
+            }
+        });
 
         specialtySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -117,22 +127,35 @@ public class RecordActivity extends BaseActivity implements VisitDateTimePickerF
         load();
     }
 
+    private void createRecord() {
+        long doctorId = ((DoctorModel)doctorSpinner.getSelectedItem()).getId();
+        long serviceId = ((ServiceModel)serviceSpinner.getSelectedItem()).getId();
+        sendRequest(clinicApi.createVisit(doctorId, serviceId, DateTime.formatUtc(currentDateTime)), new IOnResponseCallback<VisitInfoStatusModel[]>() {
+            @Override
+            public void onResponse(ApiResult<VisitInfoStatusModel[]> result) {
+                if (result.isSuccess()){
+                    snackbar(specialtySpinner, "Вы успешно записаны на прием");
+                } else {
+                    snackbar(specialtySpinner, result.getMessage());
+                }
+            }
+        });
+    }
+
     @Override
     public void onBackPressed() {
         if (viewFlipper.getDisplayedChild() == CALENDAR_VIEW){
-            onCancel();
+            onDateTimeSelect(null);
         } else {
             super.onBackPressed();
         }
     }
 
     private void onDoctorReselected(DoctorModel doctor) {
-        //snackbar(specialtySpinner, String.format("onDoctorReselected: %s", doctor.getId()));
         visitPickerFragment.setDoctorId(doctor.getId());
     }
 
     private void onServiceReselected(ServiceModel service) {
-        //snackbar(specialtySpinner, String.format("onServiceReselected: %s", service.getId()));
     }
 
     private void filterServices(final String specialty) {
@@ -249,13 +272,9 @@ public class RecordActivity extends BaseActivity implements VisitDateTimePickerF
 
     @Override
     public void onDateTimeSelect(Date date) {
-        showSpinners();
-        String value = dateTimeFormat.format(date);
-        dateTime.setText(value);
-    }
-
-    @Override
-    public void onCancel() {
+        dateTime.setText(date == null ? "" : DateTime.formatFullDate(date));
+        currentDateTime = date;
+        submit.setEnabled(date != null);
         showSpinners();
     }
 }
