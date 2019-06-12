@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateTime {
-    public final static String ISO = "yyyy-MM-dd'T'HH:mm:ss";
+    public final static String ISO = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private static final SimpleDateFormat utcFormat = new SimpleDateFormat(ISO);
 
     public static Date getNow() {

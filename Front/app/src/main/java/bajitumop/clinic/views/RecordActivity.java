@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.ViewFlipper;
 
@@ -49,11 +50,14 @@ public class RecordActivity extends BaseActivity implements VisitDateTimePickerF
     private EditText dateTime;
     private Button submit;
     private Date currentDateTime = null;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+
+        scrollView = findViewById(R.id.scrollView);
 
         visitPickerFragment = new VisitDateTimePickerFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.visitPickerFragment, visitPickerFragment).commit();
@@ -264,9 +268,11 @@ public class RecordActivity extends BaseActivity implements VisitDateTimePickerF
 
     private void showSpinners(){
         this.viewFlipper.setDisplayedChild(SPINNERS_VIEW);
+        scrollView.fullScroll(ScrollView.FOCUS_UP);
     }
 
     private void showCalendar(){
+        visitPickerFragment.reload();
         this.viewFlipper.setDisplayedChild(CALENDAR_VIEW);
     }
 
@@ -275,6 +281,7 @@ public class RecordActivity extends BaseActivity implements VisitDateTimePickerF
         dateTime.setText(date == null ? "" : DateTime.formatFullDate(date));
         currentDateTime = date;
         submit.setEnabled(date != null);
+        submit.setBackgroundColor(getResources().getColor(date != null ? R.color.colorAccent : R.color.disabled_background));
         showSpinners();
     }
 }

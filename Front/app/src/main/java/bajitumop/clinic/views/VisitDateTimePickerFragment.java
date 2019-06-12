@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class VisitDateTimePickerFragment extends BaseFragment implements OnTimeC
     private VisitInfoStatusModel[] visitInfoStatusModels;
     private ArrayList<VisitInfoStatusModel> visitStatusesForList = new ArrayList<>();
     private Date currentSelectedDateTime;
+    private ScrollView scrollView;
 
     private Button confirm;
     private TextView result;
@@ -41,18 +43,13 @@ public class VisitDateTimePickerFragment extends BaseFragment implements OnTimeC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_visit_date_time_picker, container, false);
+        result = view.findViewById(R.id.resultDate);
+        scrollView = view.findViewById(R.id.scrollViewFragment);
         calendarView = view.findViewById(R.id.calendar);
-        Date utcNow = DateTime.getNow();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(utcNow);
-        cal.add(Calendar.DATE, 14);
-        calendarView.setMinDate(utcNow.getTime());
-        calendarView.setMaxDate(cal.getTimeInMillis());
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                Date date = new Date(year, month, dayOfMonth);
-                onCalendarDayChanged(date);
+                onChangeCalendarDate(new Date(year, month, dayOfMonth));
             }
         });
 
@@ -71,7 +68,6 @@ public class VisitDateTimePickerFragment extends BaseFragment implements OnTimeC
             }
         });
 
-        result = view.findViewById(R.id.resultDate);
 
         Context context = view.getContext();
         RecyclerView recyclerView = view.findViewById(R.id.timeList);
@@ -93,11 +89,6 @@ public class VisitDateTimePickerFragment extends BaseFragment implements OnTimeC
     @Override
     public void onResume() {
         super.onResume();
-        result.setText(""); // may be it's need to move in calendarOnDayChanged
-        currentSelectedDateTime = null; // may be it's need to move in calendarOnDayChanged
-        calendarView.setDate(calendarView.getMinDate());
-        visitStatusesForList.clear(); // maybe it's not needed
-        adapter.notifyDataSetChanged(); // maybe it's not needed
         loadDoctorSchedule();
     }
 
@@ -111,11 +102,25 @@ public class VisitDateTimePickerFragment extends BaseFragment implements OnTimeC
                 }
 
                 visitInfoStatusModels = result.getData();
+                resetCalendar();
             }
         });
     }
 
-    private void onCalendarDayChanged(Date date) {
+    private void resetCalendar() {
+        Date utcNow = DateTime.getNow();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(utcNow);
+        cal.add(Calendar.DATE, 14);
+        calendarView.setMinDate(utcNow.getTime());
+        calendarView.setMaxDate(cal.getTimeInMillis());
+        calendarView.setDate(utcNow.getTime());
+        onChangeCalendarDate(new Date(calendarView.getMinDate()));
+    }
+
+    private void onChangeCalendarDate(Date date) {
+        result.setText("");
+        currentSelectedDateTime = null;
         visitStatusesForList.clear();
         for (VisitInfoStatusModel model: visitInfoStatusModels) {
             if (model.getDate().getDate() == date.getDate()
@@ -137,7 +142,11 @@ public class VisitDateTimePickerFragment extends BaseFragment implements OnTimeC
     public void onTimeClick(VisitInfoStatusModel visitStatusModel) {
         this.currentSelectedDateTime = visitStatusModel.getDate();
         result.setText(DateTime.formatFullDate(this.currentSelectedDateTime));
-        confirm.requestFocus(); // ToDo: not working
+        confirm.getParent().requestChildFocus(confirm, confirm);
+    }
+
+    public void reload() {
+        loadDoctorSchedule();
     }
 
     public interface OnDateTimeSelectListener {
